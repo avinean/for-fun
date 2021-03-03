@@ -31,6 +31,6 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ### Set up docker for front
 ```
 cd client-app
-docker build -t client-app . 
-docker run -p 8000:80 -it --name client-app client-app
+docker build -t avinean/client-app . 
+docker run -p 5000:5000 -it --name client-app client-app
 ```
