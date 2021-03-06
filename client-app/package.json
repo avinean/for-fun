@@ -10,11 +10,9 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "pg-promise": "^10.9.4",
     "register-service-worker": "^1.7.1",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
-    "vue-property-decorator": "^9.1.2",
     "vue-router": "^4.0.0-0"
   },
   "devDependencies": {

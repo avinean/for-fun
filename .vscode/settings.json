@@ -1,4 +1,0 @@
-{
-  "appService.defaultWebAppToDeploy": "/subscriptions/bc3facc0-fadb-4496-8910-32117467e528/resourceGroups/avinean/providers/Microsoft.Web/sites/avinean",
-  "appService.deploySubpath": "server-app"
-}
