@@ -1,20 +1,18 @@
 import { Application, json, Request, Router } from "express";
+import BaseAPI from './BaseAPI';
 
-export default class API {
-  router: Router;
+export default class API extends BaseAPI {
+  route: string = '/api';
 
-  constructor() {
-    this.router = Router();
-
+  initRoutes() {
     this.router.get('/', (req, res) => {
-      res.json({
-        test: 1,
-        test1: 2
-      });
+      this.db.one('SELECT * FROM users')
+      .then(function (data) {
+        res.send(data)
+      })
+      .catch(function (error) {
+        console.log('ERROR:', error)
+      })
     })
-  }
-
-  mount(app: Application): void {
-    app.use('/api', this.router);
   }
 }
