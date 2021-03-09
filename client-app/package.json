@@ -9,13 +9,16 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@doer/entities": "file:../entities",
     "core-js": "^3.6.5",
+    "element-plus": "^1.0.2-beta.33",
     "register-service-worker": "^1.7.1",
     "vue": "^3.0.0",
     "vue-class-component": "^8.0.0-0",
     "vue-router": "^4.0.0-0"
   },
   "devDependencies": {
+    "@types/doer_entities": "file:../entities",
     "@types/jest": "^24.0.19",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
@@ -30,12 +33,15 @@
     "@vue/eslint-config-airbnb": "^5.0.2",
     "@vue/eslint-config-typescript": "^5.0.2",
     "@vue/test-utils": "^2.0.0-0",
+    "babel-plugin-component": "^1.1.1",
     "eslint": "^6.7.2",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-vue": "^7.0.0-0",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.2",
     "typescript": "~3.9.3",
+    "vue-cli-plugin-element-plus": "0.0.13",
+    "vue-cli-plugin-vuetify": "~2.2.2",
     "vue-jest": "^5.0.0-0"
   }
 }

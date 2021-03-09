@@ -3,17 +3,17 @@ import pgPromise from "pg-promise";
 import db from './../DataBase/DataBase'
 
 export default class BaseAPI {
-  router: Router = Router();
-  route: string = '/api';
-  db: pgPromise.IDatabase<any, any> = db;
+  private _router: Router = Router();
+  noAuthorize: boolean = false;
+  private _db: pgPromise.IDatabase<any, any> = db;
 
   constructor() {
     this.initRoutes();
   }
 
-  mount(app: Application): void {
-    app.use(this.route, this.router);
-  }
-
   initRoutes(): void {}
+
+  get router(): Router {
+    return this._router;
+  }
 }

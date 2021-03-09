@@ -10,9 +10,6 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/about',
     name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
 ];
@@ -20,6 +17,21 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach(async (to, from, next) => {
+  // const sessionDate: any = new Date(localStorage.sessionDate);
+  // const currentDate: any = new Date();
+  // const { sessionToken } = localStorage;
+
+  // const maxSessionDuration = 24;
+  // const sessionDuration = Math.floor((currentDate - sessionDate) / 36e5);
+  // if (
+  //   !sessionToken
+  // ) {
+
+  // }
+  next();
 });
 
 export default router;
