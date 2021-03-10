@@ -15,11 +15,5 @@ export default class PublicAPI extends BaseAPI {
         res.sendStatus(err.status).send(err.message);
       });
     });
-
-    this.router.get(Routes.SignUp, (req, res) => {
-      res.send({
-        loged: 123
-      })
-    });
   }
 }

@@ -1,11 +1,8 @@
 <template>
   <div class="app">
     <c-header />
-    <div class="main-wrapper">
-      <c-sidebar />
-      <div class="main">
-        <router-view></router-view>
-      </div>
+    <div class="main">
+      <router-view></router-view>
     </div>
     <c-footer />
     <c-login />
@@ -13,22 +10,24 @@
 </template>
 
 <script>
-import { Options, Vue } from 'vue-class-component';
-import CHeader from './components/layout/Header.vue';
-import CSidebar from './components/layout/Sidebar.vue';
-import CFooter from './components/layout/Footer.vue';
-import CLogin from './components/auth/Login.vue';
+import { defineComponent, provide } from 'vue';
+import store from '@/store/store';
+import CHeader from '@/components/layout/Header.vue';
+import CFooter from '@/components/layout/Footer.vue';
+import CLogin from '@/views/Auth/Login.vue';
 
-@Options({
+export default defineComponent({
   name: 'App',
   components: {
     CHeader,
-    CSidebar,
     CFooter,
     CLogin,
   },
-})
-export default class App extends Vue {}
+  setup() {
+    provide('store', store);
+    provide('state', store.state);
+  },
+});
 
 </script>
 
@@ -47,7 +46,7 @@ export default class App extends Vue {}
   min-height: 100vh;
 }
 
-.main-wrapper {
+.main {
   flex: 1;
   display: flex;
 }
@@ -63,5 +62,9 @@ header.header {
     z-index: 1;
   padding: 20px;
   box-shadow: 0 0 2px 0 grey;
+}
+
+.spacer {
+  flex: 1;
 }
 </style>

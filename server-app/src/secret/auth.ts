@@ -15,7 +15,7 @@ export default {
     return db.one<User>(`SELECT * FROM users WHERE hash = $1`, userToken)
       .then(async ({ id, email, nickname }: User) => {
 
-        const secret = `${id}|${email}|${nickname}|the most secret base ever`;
+        const secret = `${id}|${email}|${nickname}|${new Date().toISOString()}|the most secret base ever`;
         const encrypt = crypto.createCipheriv('des-ede3', key, "");
         let sessionToken = encrypt.update(secret, 'utf8', 'base64');
         sessionToken += encrypt.final('base64');
@@ -33,7 +33,27 @@ export default {
       .catch(err => {
         throw({ status: 400, message: 'User not exist'});
       });
-  }
+  },
+  confirm(token: string) {      
+    return db.one<User>(`SELECT id, email, nickname, name, last_name, age, photo, last_authorization FROM users WHERE token = $1`, token)
+      .then(async (user: User) => {
+        const sessionDate: any = new Date(user.last_authorization);
+        const currentDate: any = new Date();
+
+        const maxSessionDuration = 24;
+        const sessionDuration = Math.floor((currentDate - sessionDate) / 36e5);
+        const authentificated = sessionDuration < maxSessionDuration;
+
+        if (authentificated) {
+          return user;
+        } else {
+          throw({ status: 403, message: 'Authorization is required'});
+        }
+      })
+      .catch(err => {
+        throw({ status: 403, message: 'Authorization is required'});
+      });
+  },
 }
 
 // const ccrypto = require("crypto");

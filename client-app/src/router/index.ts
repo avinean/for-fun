@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
+import store from '../store/store';
 import Home from '../views/Home.vue';
 
 const routes: Array<RouteRecordRaw> = [
@@ -12,26 +13,26 @@ const routes: Array<RouteRecordRaw> = [
     name: 'About',
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
+  {
+    path: '/account',
+    name: 'Account',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Account/Account.vue'),
+    beforeEnter: (to, from, next) => {
+      store.requireAuthorization()
+        .then(() => {
+          console.log('then', to);
+          next();
+        })
+        .catch((err) => {
+          next(false);
+        });
+    },
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-});
-
-router.beforeEach(async (to, from, next) => {
-  // const sessionDate: any = new Date(localStorage.sessionDate);
-  // const currentDate: any = new Date();
-  // const { sessionToken } = localStorage;
-
-  // const maxSessionDuration = 24;
-  // const sessionDuration = Math.floor((currentDate - sessionDate) / 36e5);
-  // if (
-  //   !sessionToken
-  // ) {
-
-  // }
-  next();
 });
 
 export default router;

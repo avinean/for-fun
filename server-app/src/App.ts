@@ -4,6 +4,8 @@ import cors from 'cors';
 import API from './API/API';
 import PublicAPI from './API/PublicAPI';
 import { Routes } from './Routes';
+import UserAPI from './API/UserAPI';
+import secret from './secret/auth';
 
 interface Params {
   port: number;
@@ -31,13 +33,31 @@ class App {
       next();
     });
     // authorize
-    this.app.use((req, res, next) => {
-      next();
+    this.app.use(async (req, res, next) => {
+      if (req.path.includes(Routes.PublicApi)) {
+        next();
+      } else {
+        if (!req.headers.authorization) {
+          res.sendStatus(401);
+          return;
+        }
+
+        const token = req.headers.authorization.replace('Bearer ', '');
+        try {
+          const user = await secret.confirm(token);
+          req.user = { ...user };
+        } catch (e) {
+          res.sendStatus(403);
+          return;
+        }
+        next();
+      }
     });
   }
 
   private initAPI(): void {
     this.app.use(Routes.PublicApi, new PublicAPI().router);
+    this.app.use(Routes.Api, new UserAPI().router);
     this.app.use(Routes.Api, new API().router);
 
     this.app.all('*', (req, res, next) => {
@@ -54,3 +74,4 @@ class App {
 }
 
 export default new App();
+

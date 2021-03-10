@@ -12,6 +12,12 @@
   "paths": {
       "@/*": ["*"]
   },
+  "files": [
+    "express.d.ts"
+  ],
+  "include": [
+    "express.d.ts"
+  ],
 	"exclude": [
 		"dist",
 		"node_modules"

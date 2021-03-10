@@ -1,7 +1,6 @@
 import { QueryOptions } from '@doer/entities';
 
 const defaultOptions: QueryOptions = {};
-
 export default class BaseService {
   base = 'http://127.0.0.1:5000';
 
@@ -17,7 +16,10 @@ export default class BaseService {
     const { query } = opts;
     return this.request(this.url(url) + this.query(query), {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.sessionToken}`,
+      },
       mode: 'cors',
     }).then((res) => res.json());
   }
@@ -26,7 +28,10 @@ export default class BaseService {
     const { params, query } = opts;
     return this.request(this.url(url) + this.query(query), {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.sessionToken}`,
+      },
       mode: 'cors',
       body: this.body(params),
     }).then((res) => res.json());

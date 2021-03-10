@@ -166,9 +166,14 @@
         "signature": "6d777a264c327465fc8183568acb1822633910065e5f2042bfedf35cd8d27275",
         "affectsGlobalScope": false
       },
+      "./src/store.ts": {
+        "version": "747e431ae32adf632d491ed11c7b89d05523387ef2952aae698231938793de03",
+        "signature": "22ce0d1ceb37791badf26461fe7fd1742098ca60ab35236daf3ec00f934d6b6d",
+        "affectsGlobalScope": false
+      },
       "./src/index.ts": {
-        "version": "69e27c3dc5516ca815dd0626adb56b3fa874a74a8a063baeb3a037435d4977fd",
-        "signature": "62343815cfcdf50aa233bc12d6379b3105b5adee063611b590c3a63e445c799e",
+        "version": "e145ae257a8d15bd610e87d0d4a48f94d16aa350688023ce56a1cb5c600af91f",
+        "signature": "0c6cc8372f385b8854115a3d1ed79e55fae43d958e3ead40b3495f0c8b80f34a",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/globals.d.ts": {
@@ -628,6 +633,10 @@
         "./node_modules/@types/node/zlib.d.ts"
       ],
       "./src/index.ts": [
+        "./src/all.ts",
+        "./src/store.ts"
+      ],
+      "./src/store.ts": [
         "./src/all.ts"
       ]
     },
@@ -846,6 +855,10 @@
         "./node_modules/@types/node/zlib.d.ts"
       ],
       "./src/index.ts": [
+        "./src/all.ts",
+        "./src/store.ts"
+      ],
+      "./src/store.ts": [
         "./src/all.ts"
       ]
     },
@@ -929,7 +942,8 @@
       "./node_modules/typescript/lib/lib.scripthost.d.ts",
       "./node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
       "./src/all.ts",
-      "./src/index.ts"
+      "./src/index.ts",
+      "./src/store.ts"
     ]
   },
   "version": "4.2.3"

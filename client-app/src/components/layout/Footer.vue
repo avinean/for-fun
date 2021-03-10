@@ -1,21 +1,24 @@
 <template>
-    <footer class="footer">
-        Doer
-        <template v-if="startedYear === currentYear">
-            {{ currentYear }}
-        </template>
-        <template v-else>
-            {{ startedYear }} - {{ currentYear }}
-        </template>
-    </footer>
+  <footer class="footer">
+    Doer
+    <template v-if="startedYear === currentYear">
+      {{ currentYear }}
+    </template>
+    <template v-else>
+      {{ startedYear }} - {{ currentYear }}
+    </template>
+  </footer>
 </template>
 
 <script lang="ts">
-import { Vue } from 'vue-class-component';
+import { defineComponent } from 'vue';
 
-export default class CFooter extends Vue {
-    startedYear = 2021;
-
-    currentYear: number = new Date().getFullYear();
-}
+export default defineComponent({
+  data() {
+    return {
+      startedYear: 2021,
+      currentYear: new Date().getFullYear(),
+    };
+  },
+});
 </script>
