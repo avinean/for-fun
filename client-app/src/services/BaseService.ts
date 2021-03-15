@@ -8,25 +8,25 @@ export default class BaseService {
 
   publicApi = '/public-api';
 
-  request(url: string, opts?: RequestInit): Promise<Response> {
-    return fetch(url, opts);
+  request<T>(url: string, opts?: RequestInit): Promise<T> {
+    return fetch(url, opts).then(this.parse);
   }
 
   get<T>(url: string, opts: QueryOptions = defaultOptions): Promise<T> {
     const { query } = opts;
-    return this.request(this.url(url) + this.query(query), {
+    return this.request<T>(this.url(url) + this.query(query), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.sessionToken}`,
       },
       mode: 'cors',
-    }).then((res) => res.json());
+    });
   }
 
   post<T>(url: string, opts: QueryOptions = defaultOptions): Promise<T> {
     const { params, query } = opts;
-    return this.request(this.url(url) + this.query(query), {
+    return this.request<T>(this.url(url) + this.query(query), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -34,26 +34,26 @@ export default class BaseService {
       },
       mode: 'cors',
       body: this.body(params),
-    }).then((res) => res.json());
+    });
   }
 
   publicGet<T>(url: string, opts: QueryOptions = defaultOptions): Promise<T> {
     const { query } = opts;
-    return this.request(this.publicUrl(url) + this.query(query), {
+    return this.request<T>(this.publicUrl(url) + this.query(query), {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
       mode: 'cors',
-    }).then((res) => res.json());
+    });
   }
 
   publicPost<T>(url: string, opts: QueryOptions = defaultOptions): Promise<T> {
     const { params, query } = opts;
-    return this.request(this.publicUrl(url) + this.query(query), {
+    return this.request<T>(this.publicUrl(url) + this.query(query), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       mode: 'cors',
       body: this.body(params),
-    }).then((res) => res.json());
+    });
   }
 
   body(params?: Record<string, any>): string | undefined {
@@ -66,6 +66,21 @@ export default class BaseService {
     return `?${Object.entries(params)
       .map((pair) => pair.join('='))
       .join('&')}`;
+  }
+
+  async parse(response: Response) {
+    let result;
+    try {
+      result = await response.json();
+    } catch {
+      return response;
+    }
+
+    if (result.error) {
+      throw { message: result.error };
+    } else {
+      return result;
+    }
   }
 
   url(url: string) {

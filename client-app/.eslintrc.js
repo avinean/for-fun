@@ -18,6 +18,9 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/no-empty-function': 'off',
+    'no-unused-expressions': 'off',
+    'import/no-unresolved': 'off',
+    'no-throw-literal': 'off',
   },
   overrides: [
     {

@@ -14,25 +14,43 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
   {
+    path: '/registration',
+    name: 'Registration',
+    component: () => import(/* webpackChunkName: "signup" */ '../views/Auth/SignUp.vue'),
+  },
+  {
     path: '/account',
     name: 'Account',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Account/Account.vue'),
+    component: () => import(/* webpackChunkName: "account" */ '../views/Account/Account.vue'),
     beforeEnter: (to, from, next) => {
       store.requireAuthorization()
         .then(() => {
-          console.log('then', to);
           next();
         })
         .catch((err) => {
           next(false);
         });
     },
+    children: [
+      {
+        path: '',
+        name: 'AboutSettings',
+        component: () => import(/* webpackChunkName: "account-settings" */ '../views/Account/AccountSettings.vue'),
+      },
+    ],
   },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  console.log('to', to);
+  console.log('from', from);
+  console.log('======');
+  next();
 });
 
 export default router;

@@ -12,10 +12,8 @@
   "paths": {
       "@/*": ["*"]
   },
-  "files": [
-    "express.d.ts"
-  ],
   "include": [
+    "src/**/*",
     "express.d.ts"
   ],
 	"exclude": [

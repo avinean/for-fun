@@ -4,7 +4,6 @@ import db from './../DataBase/DataBase'
 
 export default class BaseAPI {
   private _router: Router = Router();
-  noAuthorize: boolean = false;
   private _db: pgPromise.IDatabase<any, any> = db;
 
   constructor() {

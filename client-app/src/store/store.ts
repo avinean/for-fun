@@ -13,7 +13,7 @@ const clearUser = (): void => {
   state.user = null;
 };
 
-const requireAuthorization = (): Promise<void> => new Promise((resolve, reject) => {
+const checkAuthorization = (): boolean => {
   const sessionDate: any = new Date(localStorage.sessionDate);
   const currentDate: any = new Date();
   const { sessionToken } = localStorage;
@@ -21,6 +21,11 @@ const requireAuthorization = (): Promise<void> => new Promise((resolve, reject) 
   const maxSessionDuration = 24;
   const sessionDuration = Math.floor((currentDate - sessionDate) / 36e5);
   const authentificated = sessionToken && (sessionDuration < maxSessionDuration);
+
+  return authentificated;
+};
+const requireAuthorization = (): Promise<void> => new Promise((resolve, reject) => {
+  const authentificated = checkAuthorization();
 
   if (authentificated) {
     resolve();
@@ -38,6 +43,7 @@ export default {
   setUser,
   clearUser,
 
+  checkAuthorization,
   requireAuthorization,
   confirmAuthorization,
 } as Store;

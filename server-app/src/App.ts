@@ -1,9 +1,9 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import { Routes } from '@doer/entities';
 import API from './API/API';
 import PublicAPI from './API/PublicAPI';
-import { Routes } from './Routes';
 import UserAPI from './API/UserAPI';
 import secret from './secret/auth';
 
@@ -38,7 +38,7 @@ class App {
         next();
       } else {
         if (!req.headers.authorization) {
-          res.sendStatus(401);
+          res.status(403).send({ error: 'Authorization is required'});
           return;
         }
 
@@ -47,7 +47,7 @@ class App {
           const user = await secret.confirm(token);
           req.user = { ...user };
         } catch (e) {
-          res.sendStatus(403);
+          res.status(403).send({ error: 'Authorization is required'});
           return;
         }
         next();

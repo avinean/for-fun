@@ -1,7 +1,9 @@
 import { User } from "@doer/entities";
 
-declare namespace Express {
-  export interface Request {
-    user?: User;
+declare global {
+  namespace Express {
+    export interface Request {
+      user?: User;
+    }
   }
 }
