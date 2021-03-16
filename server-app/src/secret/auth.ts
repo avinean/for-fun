@@ -17,7 +17,10 @@ const check = async ({ email, pass }: AuthRequest): Promise<string|void> => {
   const token = hash({ email, pass });
 
   return db.one<User>(`SELECT * FROM users WHERE hash = $1`, token)
-    .then(async ({ id, email, nickname }: User) => {
+    .then(async ({ id, email, nickname, confirmed }: User) => {
+      // if (!confirmed) {
+      //   throw { status: 400, error: 'Email is not confirmed' };
+      // }
 
       const secret = `${id}|${email}|${nickname}|${new Date().toISOString()}|the most secret base ever`;
       const encrypt = crypto.createCipheriv('des-ede3', key, "");
@@ -34,8 +37,12 @@ const check = async ({ email, pass }: AuthRequest): Promise<string|void> => {
       
       return sessionToken;
     })
-    .catch(err => {
-      throw({ status: 400, error: 'Email or password is incorrect'});
+    .catch(e => {
+      let error = { status: 400, error: 'Email or password is incorrect'};
+      if(e.error) {
+        error = e;
+      }
+      throw(error);
     });
 };
 

@@ -1,5 +1,5 @@
+import userStore from '@/store/userStore';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import store from '../store/store';
 import Home from '../views/Home.vue';
 
 const routes: Array<RouteRecordRaw> = [
@@ -23,11 +23,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Account',
     component: () => import(/* webpackChunkName: "account" */ '../views/Account/Account.vue'),
     beforeEnter: (to, from, next) => {
-      store.requireAuthorization()
+      userStore.requireAuthorization()
         .then(() => {
           next();
         })
-        .catch((err) => {
+        .catch(() => {
           next(false);
         });
     },
@@ -44,13 +44,6 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
-});
-
-router.beforeEach((to, from, next) => {
-  console.log('to', to);
-  console.log('from', from);
-  console.log('======');
-  next();
 });
 
 export default router;

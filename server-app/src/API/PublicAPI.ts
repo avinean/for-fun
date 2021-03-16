@@ -19,7 +19,7 @@ export default class PublicAPI extends BaseAPI {
     this.router.post(Routes.SignUp, async (req, res) => {
       const hash = secret.hash(req.body);
       const { email, nickname } = req.body;
-      console.log(hash);
+      
       db.none(`
         INSERT INTO users
         (email, nickname, hash)

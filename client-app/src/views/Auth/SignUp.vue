@@ -56,10 +56,9 @@
 import {
   defineComponent, inject, reactive, Ref, ref,
 } from 'vue';
-import {
-  RegistrationRequest, State, Store,
-} from '@doer/entities';
-import router from '@/router';
+import { RegistrationRequest } from '@doer/entities';
+import { useRouter } from 'vue-router';
+import { State, Store } from '../../models/Store/StoreInterface';
 import AuthService from '../../services/AuthService';
 import defaultStore from '../../store/store';
 
@@ -67,14 +66,15 @@ const authService = new AuthService();
 
 export default defineComponent({
   setup() {
-    const message = inject<any>('message');
+    const message: any = inject<any>('message');
     const store: Store = inject<Store>('store', defaultStore);
     const state: State = inject<State>('state', defaultStore.state);
     const formRef: Ref<any> = ref(null);
+    const router = useRouter();
 
     const show: Ref<boolean> = ref(true);
     const loading: Ref<boolean> = ref(false);
-    const form: RegistrationRequest = reactive({
+    const form: Partial<RegistrationRequest> = reactive({
       email: '',
       nickname: '',
       pass: '',

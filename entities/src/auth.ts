@@ -8,8 +8,13 @@ export interface AuthResponse {
 }
 
 export interface RegistrationRequest {
+  id: number;
   email: string;
   nickname: string;
+  name: string;
+  lastName: string;
+  age: number;
+  photo: string;
   pass: string;
   confirmPass: string;
 }

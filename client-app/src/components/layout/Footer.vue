@@ -1,24 +1,91 @@
 <template>
   <footer class="footer">
-    Doer
-    <template v-if="startedYear === currentYear">
-      {{ currentYear }}
-    </template>
-    <template v-else>
-      {{ startedYear }} - {{ currentYear }}
-    </template>
+    <div class="footer__logo">
+      <router-link :to="routes.Home">
+        <img :src="logo" class="" alt="Doer Logo">
+      </router-link>
+      <div class="footer__year">
+        Doer
+        <template v-if="startedYear === currentYear">
+          {{ currentYear }}
+        </template>
+        <template v-else>
+          {{ startedYear }} - {{ currentYear }}
+        </template>
+      </div>
+    </div>
+    <div class="footer__navigation">
+      <router-link :to="routes.Home" class="footer__link">
+        Home
+      </router-link>
+      <router-link :to="routes.About" class="footer__link">
+        About us
+      </router-link>
+    </div>
   </footer>
 </template>
 
 <script lang="ts">
+import { PageRoutes } from '@/models/common';
 import { defineComponent } from 'vue';
+import { useRouter } from 'vue-router';
+import logo from '../../assets/logo.png';
 
 export default defineComponent({
-  data() {
+  setup() {
+    const router = useRouter();
+    const routes = PageRoutes;
+    const startedYear = 2021;
+    const currentYear = new Date().getFullYear();
+
+    const goToAccount = (): void => {
+      router.push(PageRoutes.Account);
+    };
+
     return {
-      startedYear: 2021,
-      currentYear: new Date().getFullYear(),
+      routes,
+      logo,
+      startedYear,
+      currentYear,
+
+      goToAccount,
     };
   },
 });
 </script>
+
+<style lang="scss">
+.footer {
+  display: flex;
+  align-items: center;
+  &__ {
+    &logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 150px;
+      padding: 0 20px;
+
+      & img {
+        width: 100%;
+      }
+    }
+    &navigation {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 0 10px;
+      height: 100%;
+    }
+    &link {
+      width: 100%;
+      padding: 4px 10px;
+      text-decoration: none;
+      color: #C0C4CC;
+      &:hover {
+        background: #606266;
+      }
+    }
+  }
+}
+</style>

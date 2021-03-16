@@ -1,8 +1,14 @@
 <template>
   <div class="app">
     <c-header />
-    <div class="main">
-      <router-view></router-view>
+    <div class="main_wrapper">
+      <c-sidebar v-if="isAccount"/>
+      <div
+        v-loading="isLoading"
+        class="main"
+      >
+        <router-view></router-view>
+      </div>
     </div>
     <c-footer />
     <c-sign-in />
@@ -10,12 +16,14 @@
 </template>
 
 <script>
-import { defineComponent, provide } from 'vue';
+import { computed, defineComponent, provide } from 'vue';
 import store from '@/store/store';
-import messageStore from '@/store/messageStore';
+import CSidebar from '@/components/layout/Sidebar.vue';
 import CHeader from '@/components/layout/Header.vue';
 import CFooter from '@/components/layout/Footer.vue';
 import CSignIn from '@/views/Auth/SignIn.vue';
+import { useRoute } from 'vue-router';
+import { Routes } from '@doer/entities';
 
 export default defineComponent({
   name: 'App',
@@ -23,17 +31,29 @@ export default defineComponent({
     CHeader,
     CFooter,
     CSignIn,
+    CSidebar,
   },
   setup() {
-    provide('message', messageStore);
+    provide('message', store.messageStore);
+    provide('user', store.userStore);
     provide('store', store);
     provide('state', store.state);
+
+    const route = useRoute();
+
+    const isAccount = computed(() => route.path.includes(Routes.Account));
+    const isLoading = computed(() => !!store.state.globalLoader);
+
+    return {
+      isAccount,
+      isLoading,
+    };
   },
 });
 
 </script>
 
-<style>
+<style lang="scss">
 * {
   margin: 0;
   padding: 0;
@@ -44,13 +64,17 @@ export default defineComponent({
 .app {
   display: flex;
   flex-direction: column;
-  width: 100vw;
+  max-width: 100vw;
   min-height: 100vh;
 }
 
-.main {
+.main, .main_wrapper {
   flex: 1;
   display: flex;
+}
+
+.main {
+  padding: 40px 80px;
 }
 
 footer.footer {
@@ -76,5 +100,16 @@ header.header {
   max-width: 960px;
   margin: 0 auto;
   padding: 40px 20px;
+
+  .header {
+    margin-bottom: 40px;
+  }
+}
+
+.mr-10 {
+  margin-right: 10px !important;
+}
+.ml-10 {
+  margin-right: 10px !important;
 }
 </style>

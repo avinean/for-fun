@@ -1,14 +1,12 @@
-import { AuthRequest, AuthResponse, User } from '@doer/entities';
-import store from '../store/store';
-import message from '../store/messageStore';
-import BaseService from './BaseService';
+import { Routes, User } from '@doer/entities';
+import BaseService from '@/services/BaseService';
 
 export default class UserService extends BaseService {
-  getUser(): void {
-    this.get<Partial<User>>('/user')
-      .then((user: Partial<User>) => {
-        console.log(user);
-        store.setUser(user);
-      }).catch(message.error);
+  getUser(): Promise<Partial<User>> {
+    return this.get<Partial<User>>(Routes.User);
+  }
+
+  updateUser(params: Partial<User>): Promise<Partial<User>> {
+    return this.put<Partial<User>>(Routes.User, { params });
   }
 }

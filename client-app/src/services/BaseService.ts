@@ -1,4 +1,4 @@
-import { QueryOptions } from '@doer/entities';
+import { QueryOptions } from '../models/common';
 
 const defaultOptions: QueryOptions = {};
 export default class BaseService {
@@ -28,6 +28,19 @@ export default class BaseService {
     const { params, query } = opts;
     return this.request<T>(this.url(url) + this.query(query), {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.sessionToken}`,
+      },
+      mode: 'cors',
+      body: this.body(params),
+    });
+  }
+
+  put<T>(url: string, opts: QueryOptions = defaultOptions): Promise<T> {
+    const { params, query } = opts;
+    return this.request<T>(this.url(url) + this.query(query), {
+      method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.sessionToken}`,

@@ -4,11 +4,6 @@ export enum Routes {
   User = '/user',
   SignIn = '/sign-in',
   SignUp = '/sign-up',
+  Account = '/account',
+  Home = '/'
 }
-  
-
-  
-
-  
-
-  

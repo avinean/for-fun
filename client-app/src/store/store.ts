@@ -1,49 +1,19 @@
-import { State, Store, User } from '@doer/entities';
+import { State, Store } from '@/models/Store/StoreInterface';
 import { reactive, readonly } from 'vue';
+import messageStore from './messageStore';
+import userStore from './userStore';
 
 const state = reactive<State>({
-  user: null,
-  authorization: null,
+  globalLoader: 0,
 });
 
-const setUser = (user: Partial<User>): void => {
-  state.user = user;
+const loading: Store['loading'] = (load) => {
+  load ? state.globalLoader += 1 : state.globalLoader -= 1;
 };
-const clearUser = (): void => {
-  state.user = null;
-};
-
-const checkAuthorization = (): boolean => {
-  const sessionDate: any = new Date(localStorage.sessionDate);
-  const currentDate: any = new Date();
-  const { sessionToken } = localStorage;
-
-  const maxSessionDuration = 24;
-  const sessionDuration = Math.floor((currentDate - sessionDate) / 36e5);
-  const authentificated = sessionToken && (sessionDuration < maxSessionDuration);
-
-  return authentificated;
-};
-const requireAuthorization = (): Promise<void> => new Promise((resolve, reject) => {
-  const authentificated = checkAuthorization();
-
-  if (authentificated) {
-    resolve();
-  } else {
-    state.authorization = { resolve, reject };
-  }
-});
-const confirmAuthorization = (): void => {
-  state.authorization = null;
-};
-
 export default {
   state: readonly(state),
+  messageStore,
+  userStore,
 
-  setUser,
-  clearUser,
-
-  checkAuthorization,
-  requireAuthorization,
-  confirmAuthorization,
+  loading,
 } as Store;

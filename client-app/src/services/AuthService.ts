@@ -1,3 +1,4 @@
+import userStore from '@/store/userStore';
 import {
   AuthRequest,
   AuthResponse,
@@ -5,7 +6,6 @@ import {
   Routes,
 } from '@doer/entities';
 import BaseService from './BaseService';
-import UserService from './UserService';
 
 export default class AuthService extends BaseService {
   signIn(params: AuthRequest): Promise<void> {
@@ -13,12 +13,11 @@ export default class AuthService extends BaseService {
       .then(({ token }: AuthResponse) => {
         localStorage.sessionToken = token;
         localStorage.sessionDate = new Date().toISOString();
-        console.log('user');
-        new UserService().getUser();
+        userStore.setUser();
       });
   }
 
-  signUp(params: RegistrationRequest): Promise<void> {
+  signUp(params: Partial<RegistrationRequest>): Promise<void> {
     return this.publicPost(Routes.SignUp, { params });
   }
 }

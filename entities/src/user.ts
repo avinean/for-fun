@@ -11,4 +11,6 @@ export interface User {
   updatedAt: string;
   lastAuthorization: string;
   token: string;
+  confirmed: boolean;
+  pass?: string;
 }

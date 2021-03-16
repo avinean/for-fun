@@ -1,7 +1,7 @@
 <template>
-  <div v-if="state.authorization" class="login_wrapper">
+  <div v-if="store.state.waitingForUser" class="login_wrapper">
     <el-dialog
-      v-model="state.authorization"
+      v-model="store.state.authorization"
       title="Log into account"
       :close-on-press-escape="false"
       :close-on-click-modal="false"
@@ -47,19 +47,20 @@
 import {
   defineComponent, inject, reactive, Ref, ref,
 } from 'vue';
-import router from '@/router';
-import { AuthRequest, State, Store } from '@doer/entities';
+import { useRouter } from 'vue-router';
+import { AuthRequest } from '@doer/entities';
 import AuthService from '../../services/AuthService';
-import defaultStore from '../../store/store';
+import { UserStoreInterface } from '../../models/Store/UserStoreInterface';
+import userStore from '../../store/userStore';
 
 const authService = new AuthService();
 
 export default defineComponent({
   setup() {
     const message = inject<any>('message');
-    const store: Store = inject<Store>('store', defaultStore);
-    const state: State = inject<State>('state', defaultStore.state);
+    const store: UserStoreInterface = inject<UserStoreInterface>('user', userStore);
     const formRef: Ref<any> = ref(null);
+    const router = useRouter();
 
     const loading: Ref<boolean> = ref(false);
     const form: AuthRequest = reactive({
@@ -80,8 +81,8 @@ export default defineComponent({
       loading.value = true;
       authService.signIn(form)
         .then(() => {
-          if (state.authorization) {
-            state.authorization.resolve();
+          if (store.state.authorization) {
+            store.state.authorization.resolve();
             store.confirmAuthorization();
           }
         })
@@ -92,7 +93,7 @@ export default defineComponent({
     };
 
     const cancel = () => {
-      if (state.authorization) {
+      if (store.state.authorization) {
         store.confirmAuthorization();
       }
     };
@@ -112,7 +113,6 @@ export default defineComponent({
 
     return {
       store,
-      state,
       loading,
       formRef,
       form,
