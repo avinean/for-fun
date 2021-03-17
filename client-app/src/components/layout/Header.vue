@@ -38,9 +38,9 @@ import { defineComponent, inject } from 'vue';
 import { Routes } from '@doer/entities';
 import { PageRoutes } from '@/models/common';
 import { useRouter } from 'vue-router';
-import logo from '../../assets/logo.png';
-import { UserStateInterface, UserStoreInterface } from '../../models/Store/UserStoreInterface';
-import userStore from '../../store/userStore';
+import logo from '@/assets/logo.png';
+import { UserStateInterface, UserStoreInterface } from '@/models/Store/UserStoreInterface';
+import userStore from '@/store/userStore';
 
 export default defineComponent({
   setup() {

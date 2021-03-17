@@ -29,7 +29,7 @@
 import { PageRoutes } from '@/models/common';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
-import logo from '../../assets/logo.png';
+import logo from '@/assets/logo.png';
 
 export default defineComponent({
   setup() {

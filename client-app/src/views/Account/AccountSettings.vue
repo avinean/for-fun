@@ -73,9 +73,9 @@ import {
   defineComponent, inject, onMounted, reactive, Ref, ref, watchEffect,
 } from 'vue';
 import { RegistrationRequest } from '@doer/entities';
-import UserService from '../../services/UserService';
-import { UserStoreInterface } from '../../models/Store/UserStoreInterface';
-import userStore from '../../store/userStore';
+import UserService from '@/services/UserService';
+import { UserStoreInterface } from '@/models/Store/UserStoreInterface';
+import userStore from '@/store/userStore';
 
 const userService = new UserService();
 

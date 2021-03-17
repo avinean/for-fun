@@ -8,7 +8,7 @@
           :class="{'card--development': game.isUnderDevelopment}"
           @click="openGame(game)"
         >
-          <img :src="game.image" class="card__image">
+          <img :src="game.image || defaultImage" class="card__image">
           <div class="card__content">
             <span>{{ game.name }}</span>
             <el-button type="text" class="button">Play</el-button>
@@ -22,26 +22,27 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
-import { Game, PageRoutes } from '../models/common';
+import { Game, PageRoutes } from '@/models/common';
+import defaultImage from '@/assets/puzzle.png';
 
 export default defineComponent({
   setup() {
     const router = useRouter();
     const gamesList: Game[] = [
       {
-        image: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        image: '',
         name: 'TikTokToe 3x3',
         stringId: 'tiktoktoe3x3',
         isUnderDevelopment: false,
       },
       {
-        image: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        image: '',
         name: 'TikTokToe 9x9',
         stringId: 'tiktoktoe9x9',
         isUnderDevelopment: true,
       },
       {
-        image: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
+        image: '',
         name: 'Battleship',
         stringId: 'battleship',
         isUnderDevelopment: true,
@@ -55,6 +56,7 @@ export default defineComponent({
 
     return {
       gamesList,
+      defaultImage,
       openGame,
     };
   },

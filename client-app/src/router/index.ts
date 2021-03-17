@@ -39,6 +39,18 @@ const routes: Array<RouteRecordRaw> = [
       },
     ],
   },
+  {
+    path: '/games',
+    name: 'Account',
+    component: () => import(/* webpackChunkName: "games" */ '../views/Games/Games.vue'),
+    children: [
+      {
+        path: 'tiktoktoe3x3',
+        name: 'TikTokToe3x3',
+        component: () => import(/* webpackChunkName: "tiktoktoe3x3" */ '../views/Games/TikTokToe/TikTokToe.vue'),
+      },
+    ],
+  },
 ];
 
 const router = createRouter({

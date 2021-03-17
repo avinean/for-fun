@@ -1,4 +1,4 @@
-import { QueryOptions } from '../models/common';
+import { QueryOptions } from '@/models/common';
 
 const defaultOptions: QueryOptions = {};
 export default class BaseService {

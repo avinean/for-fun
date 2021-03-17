@@ -49,9 +49,9 @@ import {
 } from 'vue';
 import { useRouter } from 'vue-router';
 import { AuthRequest } from '@doer/entities';
-import AuthService from '../../services/AuthService';
-import { UserStoreInterface } from '../../models/Store/UserStoreInterface';
-import userStore from '../../store/userStore';
+import AuthService from '@/services/AuthService';
+import { UserStoreInterface } from '@/models/Store/UserStoreInterface';
+import userStore from '@/store/userStore';
 
 const authService = new AuthService();
 
