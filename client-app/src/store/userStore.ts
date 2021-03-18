@@ -15,6 +15,11 @@ const confirmAuthorization: UserStoreInterface['confirmAuthorization'] = () => {
   state.authorization = null;
   state.waitingForUser = false;
 };
+const rejectAuthorization: UserStoreInterface['rejectAuthorization'] = () => {
+  state.authorization?.reject();
+  state.authorization = null;
+  state.waitingForUser = false;
+};
 const setUser = (xuser?: Partial<User>) => {
   if (xuser) {
     state.user = xuser;
@@ -73,5 +78,6 @@ export default {
   checkAuthorization,
   requireAuthorization,
   confirmAuthorization,
+  rejectAuthorization,
   logOut,
 } as UserStoreInterface;

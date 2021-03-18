@@ -1,6 +1,5 @@
 
 import { Routes } from '@doer/entities';
-import db from '../DataBase/DataBase';
 import secret from '../secret/auth';
 import BaseAPI from './BaseAPI';
 
@@ -20,7 +19,7 @@ export default class PublicAPI extends BaseAPI {
       const hash = secret.hash(req.body);
       const { email, nickname } = req.body;
       
-      db.none(`
+      this.db.none(`
         INSERT INTO users
         (email, nickname, hash)
         VALUES

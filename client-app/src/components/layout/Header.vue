@@ -35,11 +35,10 @@
 
 <script lang="ts">
 import { defineComponent, inject } from 'vue';
-import { Routes } from '@doer/entities';
 import { PageRoutes } from '@/models/common';
 import { useRouter } from 'vue-router';
 import logo from '@/assets/logo.png';
-import { UserStateInterface, UserStoreInterface } from '@/models/Store/UserStoreInterface';
+import { UserStoreInterface } from '@/models/Store/UserStoreInterface';
 import userStore from '@/store/userStore';
 
 export default defineComponent({
@@ -49,12 +48,12 @@ export default defineComponent({
     const routes = PageRoutes;
 
     const goToAccount = (): void => {
-      router.push(Routes.Account);
+      router.push(routes.Account);
     };
 
     const logOut = (): void => {
       store.logOut();
-      router.push(Routes.Home);
+      router.push(routes.Home);
     };
 
     return {

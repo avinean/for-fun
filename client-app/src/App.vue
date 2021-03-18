@@ -2,6 +2,7 @@
   <div class="app">
     <c-header />
     <div class="main_wrapper">
+      <c-chat />
       <c-sidebar v-if="isAccount"/>
       <div
         v-loading="isLoading"
@@ -22,8 +23,9 @@ import CSidebar from '@/components/layout/Sidebar.vue';
 import CHeader from '@/components/layout/Header.vue';
 import CFooter from '@/components/layout/Footer.vue';
 import CSignIn from '@/views/Auth/SignIn.vue';
+import CChat from '@/components/Chat.vue';
 import { useRoute } from 'vue-router';
-import { Routes } from '@doer/entities';
+import { PageRoutes } from './models/common';
 
 export default defineComponent({
   name: 'App',
@@ -32,6 +34,7 @@ export default defineComponent({
     CFooter,
     CSignIn,
     CSidebar,
+    CChat,
   },
   setup() {
     provide('message', store.messageStore);
@@ -41,7 +44,7 @@ export default defineComponent({
 
     const route = useRoute();
 
-    const isAccount = computed(() => route.path.includes(Routes.Account));
+    const isAccount = computed(() => route.path.includes(PageRoutes.Account));
     const isLoading = computed(() => !!store.state.globalLoader);
 
     return {

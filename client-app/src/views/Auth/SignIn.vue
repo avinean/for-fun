@@ -93,9 +93,7 @@ export default defineComponent({
     };
 
     const cancel = () => {
-      if (store.state.authorization) {
-        store.confirmAuthorization();
-      }
+      store.rejectAuthorization();
     };
 
     const submit = () => {

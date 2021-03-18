@@ -162,8 +162,8 @@
         "affectsGlobalScope": true
       },
       "./src/routes.ts": {
-        "version": "61a1a33f46d7d2b957b77b9534b1b5845130eea38dbb139585848cd25a8b03d7",
-        "signature": "02c5e927aecd990e45a5ba5853e722c5f3a4da50412a635aa2b6880d3a8cca04",
+        "version": "0c6204bf76fc3209c5341075a51833b0f02ca3b58e5d02d22efe318834b32fe8",
+        "signature": "1a9d8f279c22adb6869cd248b747a591cb6053aaf43204c0748d4287e70d6c9e",
         "affectsGlobalScope": false
       },
       "./src/auth.ts": {
@@ -171,14 +171,24 @@
         "signature": "060457943003196ea02c44c2cbb2449fc85b152304be7c2b660b447d70e86d20",
         "affectsGlobalScope": false
       },
+      "./src/chat.ts": {
+        "version": "a2fdbeaa771702651b1d8939f010ab3b55362ac57bf610cf6bb16ed25bb4dabe",
+        "signature": "1d44b3c10ee5274fde9986498b037e4e66f0bd46538ad02551b572dcba21cbcd",
+        "affectsGlobalScope": false
+      },
       "./src/user.ts": {
         "version": "574b5652a65f60aa070de48400b6a1c277ca9ad5a64a5c0e9694c8b894a2bbba",
         "signature": "f394a0c8e90f432e4d457cf79b4615466030d1df0fbed107596d978bac279500",
         "affectsGlobalScope": false
       },
+      "./src/message.ts": {
+        "version": "cf1df1354493bc65ac359a723e3acf396eacdfd3c9d8245141682d89d5f8786a",
+        "signature": "4f839b52d869c0a91f56e592ca4626961fd341f7529a15d28849c026b8ab753f",
+        "affectsGlobalScope": false
+      },
       "./src/index.ts": {
-        "version": "cf9f02018a397ccbcb77729bc818d65dc58529e505861d2551b71ef6f5d61f5a",
-        "signature": "1baf0e49eed6858103170e854ac999c838a3e5a4610834735938b69beca127b7",
+        "version": "b8bae4fe98d297fa0690671c213a682673ab54a4623051a15e95338463bc56f3",
+        "signature": "9776d0dde41eafb2af246beee32a52e8f50cca5790917f22870b848c0462b883",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/globals.d.ts": {
@@ -631,6 +641,8 @@
       ],
       "./src/index.ts": [
         "./src/auth.ts",
+        "./src/chat.ts",
+        "./src/message.ts",
         "./src/routes.ts",
         "./src/user.ts"
       ]
@@ -848,6 +860,8 @@
       ],
       "./src/index.ts": [
         "./src/auth.ts",
+        "./src/chat.ts",
+        "./src/message.ts",
         "./src/routes.ts",
         "./src/user.ts"
       ]
@@ -931,7 +945,9 @@
       "./node_modules/typescript/lib/lib.scripthost.d.ts",
       "./node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
       "./src/auth.ts",
+      "./src/chat.ts",
       "./src/index.ts",
+      "./src/message.ts",
       "./src/routes.ts",
       "./src/user.ts"
     ]

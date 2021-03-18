@@ -16,5 +16,6 @@ export interface UserStoreInterface {
   checkAuthorization: () => boolean;
   requireAuthorization: () => Promise<void>;
   confirmAuthorization: () => void;
+  rejectAuthorization: () => void;
   logOut: () => void;
 }
