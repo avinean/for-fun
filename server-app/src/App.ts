@@ -8,7 +8,6 @@ import UserAPI from './API/UserAPI';
 import secret from './secret/auth';
 import BaseAPI from './API/BaseAPI';
 import ChatAPI from './API/ChatAPI';
-import MessageAPI from './API/MessageAPI';
 import SocketsAPI from './SocketsAPI/SocketsAPI';
 
 interface Params {
@@ -70,7 +69,6 @@ class App {
     this.addController([ Routes.PublicApi ], new PublicAPI());
     this.addController([ Routes.Api, Routes.User ], new UserAPI());
     this.addController([ Routes.Api, Routes.Chat ], new ChatAPI());
-    this.addController([ Routes.Api, Routes.Message ], new MessageAPI());
 
     this.app.all('*', (req, res, next) => {
       res.send(404);

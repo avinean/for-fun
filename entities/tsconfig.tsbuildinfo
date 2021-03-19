@@ -182,8 +182,8 @@
         "affectsGlobalScope": false
       },
       "./src/message.ts": {
-        "version": "cf1df1354493bc65ac359a723e3acf396eacdfd3c9d8245141682d89d5f8786a",
-        "signature": "4f839b52d869c0a91f56e592ca4626961fd341f7529a15d28849c026b8ab753f",
+        "version": "e5df7eea9099f3c794a8fa477a6a946a4936fe91c2c23d2caa2d1aae23bd2245",
+        "signature": "f21a5467b474082032f263022978ec814c358b49903ca2a0a5e087ec6a6b0c9d",
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
@@ -645,6 +645,9 @@
         "./src/message.ts",
         "./src/routes.ts",
         "./src/user.ts"
+      ],
+      "./src/message.ts": [
+        "./src/user.ts"
       ]
     },
     "exportedModulesMap": {
@@ -863,6 +866,9 @@
         "./src/chat.ts",
         "./src/message.ts",
         "./src/routes.ts",
+        "./src/user.ts"
+      ],
+      "./src/message.ts": [
         "./src/user.ts"
       ]
     },

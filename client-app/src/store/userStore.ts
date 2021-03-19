@@ -10,6 +10,12 @@ const state = reactive<UserStateInterface>({
   authorization: null,
   waitingForUser: false,
 });
+
+const logOut: UserStoreInterface['logOut'] = () => {
+  localStorage.sessionToken = '';
+  localStorage.sessionDate = '';
+  state.user = null;
+};
 const confirmAuthorization: UserStoreInterface['confirmAuthorization'] = () => {
   state.authorization?.resolve();
   state.authorization = null;
@@ -32,7 +38,10 @@ const setUser = (xuser?: Partial<User>) => {
       state.user = user;
       confirmAuthorization();
     })
-    .catch(messageStore.error)
+    .catch((error) => {
+      messageStore.error(error);
+      logOut();
+    })
     .finally(() => {
       store.loading(false);
     });
@@ -63,11 +72,6 @@ const requireAuthorization: UserStoreInterface['requireAuthorization'] = () => n
   if (!state.user) setUser();
   else confirmAuthorization();
 });
-const logOut: UserStoreInterface['logOut'] = () => {
-  localStorage.sessionToken = '';
-  localStorage.sessionDate = '';
-  state.user = null;
-};
 
 export default {
   state: readonly(state),

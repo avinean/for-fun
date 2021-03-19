@@ -17,19 +17,25 @@ export default class SocketsAPI {
 
   private initAPI(): void {
     this.io
-    // .use(async (socket, next) => {
-    //   const token = socket.handshake.query.token as string;
+    .use(this.checkAuth.bind(this))
+    .on('connection', this.onConnection.bind(this)); 
+  }
 
-    //   const user = await secret.confirm(token);
-    //   console.log(user.nickname, '===================');
-    //   next()
-    // })
-    .on('connection', async (socket) => {
-      const token = socket.handshake.query.token as string;
+  private async checkAuth(socket, next) {
+    const token = socket.handshake.auth.token as string;
+
+    try {
       const user = await secret.confirm(token);
-      console.log(`user ${user.nickname} connected`);
+      socket.user = user;
+      next();
+    } catch {
+      next(new Error('Authorization is required'));
+    }
+  }
 
-      new SocketsChatAPI(socket, user);
-    }); 
+  private async onConnection(socket) {
+    console.log(`user ${socket.user.nickname} connected`);
+
+    new SocketsChatAPI(socket);
   }
 }

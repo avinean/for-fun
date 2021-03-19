@@ -1,9 +1,9 @@
-import { User } from "@doer/entities";
+import { User } from '@doer/entities';
 
 export interface UserStateInterface {
   user: Partial<User> | null;
   authorization: {
-    resolve: () => void;
+    resolve: (value?: any) => void;
     reject: () => void;
   } | null;
   waitingForUser: boolean;
