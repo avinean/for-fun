@@ -46,9 +46,15 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "games" */ '../views/Games/Games.vue'),
     children: [
       {
-        path: 'tiktoktoe3x3',
-        name: 'TikTokToe3x3',
-        component: () => import(/* webpackChunkName: "tiktoktoe3x3" */ '../views/Games/TikTokToe/TikTokToe.vue'),
+        path: '',
+        name: 'GamesList',
+        component: () => import(/* webpackChunkName: "gameslist" */ '../views/Games/GamesList.vue'),
+      },
+      {
+        path: 'tiktactoe3x3',
+        name: 'TikTacToe3x3',
+        meta: { isGame: true },
+        component: () => import(/* webpackChunkName: "tiktactoe3x3" */ '../views/Games/TikTacToe/TikTacToe.vue'),
       },
     ],
   },

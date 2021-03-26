@@ -21,6 +21,9 @@
       <router-link :to="routes.About" class="footer__link">
         About us
       </router-link>
+      <router-link :to="routes.Account" class="footer__link">
+        Account
+      </router-link>
     </div>
   </footer>
 </template>
@@ -58,6 +61,11 @@ export default defineComponent({
 .footer {
   display: flex;
   align-items: center;
+  height: 200px;
+  background: #303133;
+  color: #fff;
+  padding: 20px;
+
   &__ {
     &logo {
       display: flex;

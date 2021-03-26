@@ -162,8 +162,8 @@
         "affectsGlobalScope": true
       },
       "./src/routes.ts": {
-        "version": "0c6204bf76fc3209c5341075a51833b0f02ca3b58e5d02d22efe318834b32fe8",
-        "signature": "1a9d8f279c22adb6869cd248b747a591cb6053aaf43204c0748d4287e70d6c9e",
+        "version": "e2d8392bd7d2e69adba9519aba1301b966afe964a91ad14eb9df0edca11b2e25",
+        "signature": "7f0a87c03ff24da3923218d198be699d22852a09dc3c1fcee7da947df506dbec",
         "affectsGlobalScope": false
       },
       "./src/auth.ts": {
@@ -177,18 +177,23 @@
         "affectsGlobalScope": false
       },
       "./src/user.ts": {
-        "version": "574b5652a65f60aa070de48400b6a1c277ca9ad5a64a5c0e9694c8b894a2bbba",
-        "signature": "f394a0c8e90f432e4d457cf79b4615466030d1df0fbed107596d978bac279500",
+        "version": "39f0a1f55c0712a7a938d9f832363e74b1a8497f094ade5a9d65c4164f3e0f8a",
+        "signature": "b834a95075ecec3879b45843880a608a83948a301dd6659ac7bdd48cd92f02c4",
+        "affectsGlobalScope": false
+      },
+      "./src/game.ts": {
+        "version": "76d25f380fab408b383fad355746307ab527e91bbc4352b91f321ac02f665fc5",
+        "signature": "841394b332099400a324af1488b58f9b1dc13468b492bd2cc1c82cbcced07704",
         "affectsGlobalScope": false
       },
       "./src/message.ts": {
-        "version": "e5df7eea9099f3c794a8fa477a6a946a4936fe91c2c23d2caa2d1aae23bd2245",
-        "signature": "f21a5467b474082032f263022978ec814c358b49903ca2a0a5e087ec6a6b0c9d",
+        "version": "b0cdb3e66c0b417bbee35d1fdb1007efbde767f9697eb7f4b50fffafaf36e08f",
+        "signature": "d7c306fe9533af80afc8ce086f9a6b5f500fc9f08ddc1e09e2edb332d9555323",
         "affectsGlobalScope": false
       },
       "./src/index.ts": {
-        "version": "b8bae4fe98d297fa0690671c213a682673ab54a4623051a15e95338463bc56f3",
-        "signature": "9776d0dde41eafb2af246beee32a52e8f50cca5790917f22870b848c0462b883",
+        "version": "2d8249d75d00cdc3ee6a1ecbcace1b070cb515b09a671235678e07f4c064f8fc",
+        "signature": "d101da27838282e53dfe81c08de05c91a22f31a02e2ab0790bf2bf18d5077523",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/globals.d.ts": {
@@ -639,9 +644,13 @@
         "./node_modules/@types/node/stream.d.ts",
         "./node_modules/@types/node/zlib.d.ts"
       ],
+      "./src/game.ts": [
+        "./src/user.ts"
+      ],
       "./src/index.ts": [
         "./src/auth.ts",
         "./src/chat.ts",
+        "./src/game.ts",
         "./src/message.ts",
         "./src/routes.ts",
         "./src/user.ts"
@@ -861,9 +870,13 @@
         "./node_modules/@types/node/stream.d.ts",
         "./node_modules/@types/node/zlib.d.ts"
       ],
+      "./src/game.ts": [
+        "./src/user.ts"
+      ],
       "./src/index.ts": [
         "./src/auth.ts",
         "./src/chat.ts",
+        "./src/game.ts",
         "./src/message.ts",
         "./src/routes.ts",
         "./src/user.ts"
@@ -952,6 +965,7 @@
       "./node_modules/typescript/lib/lib.webworker.importscripts.d.ts",
       "./src/auth.ts",
       "./src/chat.ts",
+      "./src/game.ts",
       "./src/index.ts",
       "./src/message.ts",
       "./src/routes.ts",

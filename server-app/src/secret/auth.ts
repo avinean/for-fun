@@ -31,13 +31,15 @@ const check = async ({ email, pass }: AuthRequest): Promise<string|void> => {
         UPDATE users 
         SET 
         token = $1,
-        last_authorization = $2
+        last_authorization = $2,
+        is_online = true
         where id = $3
       `, [ sessionToken, new Date().toISOString(), id ]);
       
       return sessionToken;
     })
     .catch(e => {
+      console.log(e);
       let error = { status: 400, error: 'Email or password is incorrect'};
       if(e.error) {
         error = e;

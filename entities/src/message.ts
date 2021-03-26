@@ -12,4 +12,5 @@ export interface Message {
 export interface MessageObject {
   message: Message;
   user: User;
+  isPrev?: boolean;
 }

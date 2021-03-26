@@ -1,36 +1,41 @@
 <template>
-  <header class="header">
-    <router-link :to="routes.Home">
-      <img :src="logo" class="header__logo" alt="Doer Logo">
-    </router-link>
-    <router-link :to="routes.Home" class="header__link">
-      Home
-    </router-link>
-    <router-link :to="routes.About" class="header__link">
-      About us
-    </router-link>
-    <div class="spacer"></div>
-    <template v-if="state.user">
+  <div class="header__wrap">
+    <header class="header">
+      <router-link :to="routes.Home">
+        <img :src="logo" class="header__logo" alt="Doer Logo">
+      </router-link>
+      <router-link :to="routes.Home" class="header__link">
+        Home
+      </router-link>
+      <router-link :to="routes.Games" class="header__link">
+        Games
+      </router-link>
+      <router-link :to="routes.About" class="header__link">
+        About us
+      </router-link>
+      <div class="spacer"></div>
+      <template v-if="state.user">
+        <el-button
+          type="danger"
+          icon="el-icon-switch-button"
+          circle
+          class="mr-10"
+          @click="logOut"
+        ></el-button>
+        <el-avatar
+          :src="state.user.photo"
+          @click="goToAccount"
+        ></el-avatar>
+      </template>
       <el-button
-        type="danger"
-        icon="el-icon-switch-button"
+        v-else
+        type="primary"
+        :icon="!state.waitingForUser ? 'el-icon-user-solid' : 'el-icon-loading'"
         circle
-        class="mr-10"
-        @click="logOut"
-      ></el-button>
-      <el-avatar
-        :src="state.user.photo"
         @click="goToAccount"
-      ></el-avatar>
-    </template>
-    <el-button
-      v-else
-      type="primary"
-      :icon="!state.waitingForUser ? 'el-icon-user-solid' : 'el-icon-loading'"
-      circle
-      @click="goToAccount"
-    ></el-button>
-  </header>
+      ></el-button>
+    </header>
+  </div>
 </template>
 
 <script lang="ts">
@@ -69,10 +74,23 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.header {
+.header__wrap header.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
   display: flex;
+  height: 100px;
   align-items: center;
+  background: #ffffffcc;
+}
+.header {
   &__ {
+    &wrap {
+      height: 100px;
+      width: 100vw;
+    }
     &logo {
       width: 50px;
       margin: 0 25px;

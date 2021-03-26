@@ -6,4 +6,5 @@ export enum Routes {
   User = '/user',
   Chat = '/chat',
   Message = '/message',
+  Game = '/game',
 }

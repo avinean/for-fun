@@ -2,7 +2,6 @@
   <div class="app">
     <c-header />
     <div class="main_wrapper">
-      <c-chat />
       <c-sidebar v-if="isAccount"/>
       <div
         v-loading="isLoading"
@@ -11,13 +10,18 @@
         <router-view></router-view>
       </div>
     </div>
+    <div class="pre-footer">
+      <c-chat v-if="isAuthorized" :key="chatKey"/>
+    </div>
     <c-footer />
     <c-sign-in />
   </div>
 </template>
 
 <script>
-import { computed, defineComponent, provide } from 'vue';
+import {
+  computed, defineComponent, onMounted, provide,
+} from 'vue';
 import store from '@/store/store';
 import CSidebar from '@/components/layout/Sidebar.vue';
 import CHeader from '@/components/layout/Header.vue';
@@ -39,6 +43,7 @@ export default defineComponent({
   setup() {
     provide('message', store.messageStore);
     provide('user', store.userStore);
+    provide('game', store.gameStore);
     provide('store', store);
     provide('state', store.state);
 
@@ -46,10 +51,19 @@ export default defineComponent({
 
     const isAccount = computed(() => route.path.includes(PageRoutes.Account));
     const isLoading = computed(() => !!store.state.globalLoader);
+    const isAuthorized = computed(() => !!store.userStore.state.user);
+    const chatKey = computed(() => JSON.stringify(store.userStore.state.user));
+
+    onMounted(() => {
+      store.userStore.setUser();
+      store.gameStore.loadGames();
+    });
 
     return {
       isAccount,
       isLoading,
+      isAuthorized,
+      chatKey,
     };
   },
 });
@@ -80,10 +94,11 @@ export default defineComponent({
   padding: 40px 80px;
 }
 
-footer.footer {
-  background: #303133;
-  color: #fff;
-  padding: 20px;
+.pre-footer {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 header.header {

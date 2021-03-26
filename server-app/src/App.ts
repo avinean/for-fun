@@ -7,8 +7,10 @@ import PublicAPI from './API/PublicAPI';
 import UserAPI from './API/UserAPI';
 import secret from './secret/auth';
 import BaseAPI from './API/BaseAPI';
-import ChatAPI from './API/ChatAPI';
+import ChatAPI from './API/MessageAPI';
 import SocketsAPI from './SocketsAPI/SocketsAPI';
+import MessageAPI from './API/MessageAPI';
+import GameAPI from './API/GameAPI';
 
 interface Params {
   port: number;
@@ -69,6 +71,8 @@ class App {
     this.addController([ Routes.PublicApi ], new PublicAPI());
     this.addController([ Routes.Api, Routes.User ], new UserAPI());
     this.addController([ Routes.Api, Routes.Chat ], new ChatAPI());
+    this.addController([ Routes.Api, Routes.Message ], new MessageAPI());
+    this.addController([ Routes.Api, Routes.Game ], new GameAPI());
 
     this.app.all('*', (req, res, next) => {
       res.send(404);

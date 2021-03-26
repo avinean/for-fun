@@ -11,6 +11,17 @@ const state = reactive<UserStateInterface>({
   waitingForUser: false,
 });
 
+const checkAuthorization: UserStoreInterface['checkAuthorization'] = () => {
+  const sessionDate: any = new Date(localStorage.sessionDate);
+  const currentDate: any = new Date();
+  const { sessionToken } = localStorage;
+
+  const maxSessionDuration = 24;
+  const sessionDuration = Math.floor((currentDate - sessionDate) / 36e5);
+  const authentificated = sessionToken && (sessionDuration < maxSessionDuration);
+
+  return authentificated;
+};
 const logOut: UserStoreInterface['logOut'] = () => {
   localStorage.sessionToken = '';
   localStorage.sessionDate = '';
@@ -32,6 +43,14 @@ const setUser = (xuser?: Partial<User>) => {
     return;
   }
 
+  if (!checkAuthorization()) {
+    return;
+  }
+
+  if (state.user) {
+    return;
+  }
+
   store.loading(true);
   new UserService().getUser()
     .then((user: Partial<User>) => {
@@ -48,17 +67,6 @@ const setUser = (xuser?: Partial<User>) => {
 };
 const clearUser: UserStoreInterface['clearUser'] = () => {
   state.user = null;
-};
-const checkAuthorization: UserStoreInterface['checkAuthorization'] = () => {
-  const sessionDate: any = new Date(localStorage.sessionDate);
-  const currentDate: any = new Date();
-  const { sessionToken } = localStorage;
-
-  const maxSessionDuration = 24;
-  const sessionDuration = Math.floor((currentDate - sessionDate) / 36e5);
-  const authentificated = sessionToken && (sessionDuration < maxSessionDuration);
-
-  return authentificated;
 };
 const requireAuthorization: UserStoreInterface['requireAuthorization'] = () => new Promise((resolve, reject) => {
   const authentificated = checkAuthorization();

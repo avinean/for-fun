@@ -2,6 +2,7 @@ import { Server } from "socket.io";
 import http from 'http';
 import secret from '../secret/auth';
 import SocketsChatAPI from "./SocketsChatAPI";
+import SocketsGameAPI from "./SocketsGameAPI";
 
 export default class SocketsAPI {
   private io: Server;
@@ -37,5 +38,6 @@ export default class SocketsAPI {
     console.log(`user ${socket.user.nickname} connected`);
 
     new SocketsChatAPI(socket);
+    new SocketsGameAPI(socket);
   }
 }

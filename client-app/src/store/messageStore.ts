@@ -2,7 +2,7 @@ import { MessageStoreInterface } from '@/models/Store/MessageStoreInterface';
 import { ElNotification } from 'element-plus';
 import { INotificationOptions } from 'element-plus/lib/el-notification/src/notification.type';
 
-const message = (options: Partial<INotificationOptions>) => { ElNotification(options); };
+const message = (options: Partial<INotificationOptions>) => ElNotification(options);
 
 const success = (options: Partial<INotificationOptions>) => {
   message({

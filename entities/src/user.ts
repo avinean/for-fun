@@ -10,6 +10,7 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   lastAuthorization: string;
+  isOnline: boolean;
   token: string;
   confirmed: boolean;
   pass?: string;

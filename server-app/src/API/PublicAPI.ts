@@ -34,5 +34,10 @@ export default class PublicAPI extends BaseAPI {
           });
         });
     });
+
+    this.router.get('/test', async (req, res) => {
+      console.log('/test', 'beacon reseived');
+      res.sendStatus(200);
+    });
   }
 }

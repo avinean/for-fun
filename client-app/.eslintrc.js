@@ -21,7 +21,8 @@ module.exports = {
     'no-unused-expressions': 'off',
     'import/no-unresolved': 'off',
     'no-throw-literal': 'off',
-    'import/no-cycle': 'off'
+    'import/no-cycle': 'off',
+    'import/prefer-default-export': 'off'
   },
   overrides: [
     {
