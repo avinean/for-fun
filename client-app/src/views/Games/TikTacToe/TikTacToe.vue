@@ -1,26 +1,37 @@
 <template>
-  <div class="container tiktactoe">
-    <div v-if="user1 && user2" class="tiktactoe__head">
-      <div class="tiktactoe__user">
+  <div class="tiktactoe">
+    <div v-if="inviter && acceptor" class="tiktactoe__head">
+      <div class="tiktactoe__game">
         <el-avatar
-          :src="user1.photo || defaultAvatar"
+          shape="square"
+          :size="80"
+          :src="game.image"
         ></el-avatar>
-        <template v-if="user1.name && user1.lastName">
-          {{ user1.name }} {{ user1.lastName }} ({{ user1.nickname }})
-        </template>
-        <template v-else>
-          {{ user1.nickname }}
-        </template>
+        <h2>{{ game.name }}</h2>
       </div>
       <div class="tiktactoe__user">
-        <template v-if="user2.name && user2.lastName">
-          {{ user2.name }} {{ user2.lastName }} ({{ user2.nickname }})
+        <el-avatar
+          :src="inviter.photo || defaultAvatar"
+        ></el-avatar>
+        <template v-if="inviter.name && inviter.lastName">
+          {{ inviter.name }} {{ inviter.lastName }} ({{ inviter.nickname }})
         </template>
         <template v-else>
-          {{ user2.nickname }}
+          {{ inviter.nickname }}
+        </template>
+      </div>
+      <div class="tiktactoe__score">
+        0:0
+      </div>
+      <div class="tiktactoe__user">
+        <template v-if="acceptor.name && acceptor.lastName">
+          {{ acceptor.name }} {{ acceptor.lastName }} ({{ acceptor.nickname }})
+        </template>
+        <template v-else>
+          {{ acceptor.nickname }}
         </template>
         <el-avatar
-          :src="user2.photo || defaultAvatar"
+          :src="acceptor.photo || defaultAvatar"
         ></el-avatar>
       </div>
     </div>
@@ -37,15 +48,26 @@
 <script lang="ts">
 import { GameStoreInterface } from '@/models/Store/GameStoreInterface';
 import { UserStoreInterface } from '@/models/Store/UserStoreInterface';
-import { computed, defineComponent, inject } from 'vue';
+import {
+  computed, defineComponent, inject, onMounted,
+} from 'vue';
 import defaultAvatar from '@/assets/default_user.png';
+import { useRoute } from 'vue-router';
+import { Game } from '@doer/entities';
 
 export default defineComponent({
   setup() {
+    const route = useRoute();
     const userStore = inject<UserStoreInterface>('user');
     const gameStore = inject<GameStoreInterface>('game');
-    const user1 = computed(() => gameStore?.state.user1);
-    const user2 = computed(() => gameStore?.state.user2);
+    const inviter = computed(() => gameStore?.state.inviter);
+    const acceptor = computed(() => gameStore?.state.acceptor);
+    const game = computed(() => {
+      if (gameStore?.state.game) return gameStore?.state.game;
+
+      const { groups: { gameId } } = route.path.match(/\/games\/(?<gameId>.+)/) as any;
+      return gameStore?.state.games.find((g: Game) => g.strId === gameId);
+    });
     const field = [
       ['', '', ''],
       ['', '', ''],
@@ -55,8 +77,9 @@ export default defineComponent({
     return {
       field,
       defaultAvatar,
-      user1,
-      user2,
+      inviter,
+      acceptor,
+      game,
 
       userStore,
       gameStore,
@@ -68,6 +91,15 @@ export default defineComponent({
 <style lang="scss">
 .tiktactoe {
   &__ {
+    &head {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: auto;
+      gap: 24px 0;
+      width: 100vw;
+      max-width: 450px;
+      padding: 12px 0;
+    }
     &field {
       display: grid;
       grid-template-rows: repeat(3, 1fr);
@@ -80,9 +112,26 @@ export default defineComponent({
     &cell {
       border: 1px solid grey;
     }
-    &head{
+    &user, &score {
       display: flex;
+      align-items: center;
+      justify-content: space-around;
+
+      .el-avatar {
+        min-width: 40px;
+      }
+    }
+    &user {
       justify-content: space-between;
+    }
+    &game {
+      grid-column: 1/5;
+      display: flex;
+      align-items: center;
+
+      .el-avatar {
+        margin-right: 32px;
+      }
     }
   }
 }

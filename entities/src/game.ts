@@ -11,6 +11,6 @@ export interface Game {
 
 export interface GameRequest {
   game: Game;
-  user1: User;
-  user2: User;
+  inviter: User;
+  acceptor: User;
 }

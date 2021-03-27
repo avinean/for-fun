@@ -66,9 +66,8 @@ import defaultAvatar from '@/assets/default_user.png';
 import { isPrev } from '@/helpers/message';
 import { getDate } from '@/helpers/date';
 import MessageService from '@/services/MessagesService';
-import SocketService from '@/services/SocketService';
+import socket from '@/services/SocketService';
 import { RouteLocationRaw, useRoute, useRouter } from 'vue-router';
-import { UserStoreInterface } from '@/models/Store/UserStoreInterface';
 import { GameStoreInterface } from '@/models/Store/GameStoreInterface';
 
 const messageService = new MessageService();
@@ -77,12 +76,8 @@ export default defineComponent({
   setup() {
     const messagesWrap = ref(document.createElement('div'));
     const draft = ref<string>('');
-    const isCollapsed = ref<boolean>(false);
+    const isCollapsed = ref<boolean>(true);
     const messages = reactive<MessageObject[]>([]);
-    const socket = new SocketService();
-    const route = useRoute();
-    const router = useRouter();
-    const userStore = inject<UserStoreInterface>('user');
     const gameStore = inject<GameStoreInterface>('game');
 
     const scrollToBottom = () => {
@@ -115,23 +110,6 @@ export default defineComponent({
       });
     };
 
-    const inviteToGame = (user: User) => {
-      const currentUser = userStore?.state.user;
-      if (user.id === currentUser?.id) return;
-      if (!route.meta.isGame) return;
-
-      const { groups: { gameId } } = route.path.match(/\/games\/(?<gameId>.+)/) as any;
-      const currentGame = gameStore?.state.games.find((game: Game) => game.strId === gameId);
-
-      if (!currentGame) return;
-
-      socket.emit('invite to game', {
-        user1: currentUser,
-        user2: user,
-        game: currentGame,
-      });
-    };
-
     onMounted(() => {
       loadHistory();
       socket.init();
@@ -156,7 +134,7 @@ export default defineComponent({
       isCollapsed,
       send,
       getDate,
-      inviteToGame,
+      inviteToGame: gameStore?.sendInvitation,
     };
   },
 });

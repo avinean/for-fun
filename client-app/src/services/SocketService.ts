@@ -3,8 +3,10 @@ import {
 } from 'socket.io-client';
 import { DefaultEventsMap } from 'socket.io-client/build/typed-events';
 
-export default class SocketService {
+class SocketService {
   private socket: Socket<DefaultEventsMap, DefaultEventsMap>;
+
+  private inited = false;
 
   constructor() {
     const token: string = localStorage.sessionToken;
@@ -19,7 +21,10 @@ export default class SocketService {
   }
 
   init(): void {
-    this.socket.connect();
+    if (!this.inited) {
+      this.inited = true;
+      this.socket.connect();
+    }
   }
 
   emit(key: string, val: any): void {
@@ -30,3 +35,5 @@ export default class SocketService {
     this.socket.on(key, handler);
   }
 }
+
+export default new SocketService();

@@ -1,5 +1,7 @@
 import { PageRoutes } from '@/models/common';
+import gameStore from '@/store/gameStore';
 import userStore from '@/store/userStore';
+import { Game } from '@doer/entities';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import Home from '../views/Home.vue';
 

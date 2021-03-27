@@ -3,9 +3,11 @@ import http from 'http';
 import secret from '../secret/auth';
 import SocketsChatAPI from "./SocketsChatAPI";
 import SocketsGameAPI from "./SocketsGameAPI";
+import UsersStore from "./UsersStore";
 
 export default class SocketsAPI {
   private io: Server;
+  private users: {[key: string]: string} = {};
 
   constructor(http: http.Server) {
     this.io = new Server(http, {
@@ -36,6 +38,15 @@ export default class SocketsAPI {
 
   private async onConnection(socket) {
     console.log(`user ${socket.user.nickname} connected`);
+
+    UsersStore.add({
+      socketId: socket.id,
+      user: socket.user,
+    });
+
+    socket.on("disconnect", (reason) => {
+      UsersStore.remove(socket.user.id);
+    });
 
     new SocketsChatAPI(socket);
     new SocketsGameAPI(socket);
