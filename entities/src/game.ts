@@ -14,3 +14,8 @@ export interface GameRequest {
   inviter: User;
   acceptor: User;
 }
+
+export interface GameMessage<T> {
+  data: T;
+  to: User;
+}

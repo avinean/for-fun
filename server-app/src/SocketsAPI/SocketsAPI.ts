@@ -16,6 +16,18 @@ export default class SocketsAPI {
       },
     });
     this.initAPI();
+
+
+
+    setInterval(() => {
+      console.log(UsersStore.users.map((user) => {
+        return {
+          socketId: user.socketId,
+          userId: user.user.id
+        }
+      }));
+    }, 2000);
+
   }
 
   private initAPI(): void {

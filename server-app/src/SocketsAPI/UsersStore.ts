@@ -24,10 +24,9 @@ export default {
     }
   },
   remove(userID: number) {
-    const index = this.getByUserID(userID);
-    if(~index) {
-      this.users.splice(index, 1);
-    }
+    this.users = this.users.filter((config: UserConfig) => {
+      return config.user.id !== userID;
+    });
   },
   getBySocketID(socketId: string) {
     return this.users.find((config: UserConfig) => {

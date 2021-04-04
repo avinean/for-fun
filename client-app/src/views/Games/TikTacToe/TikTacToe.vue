@@ -1,7 +1,7 @@
 <template>
   <div class="tiktactoe">
-    <div v-if="inviter && acceptor" class="tiktactoe__head">
-      <div class="tiktactoe__game">
+    <div class="tiktactoe__head">
+      <div v-if="game" class="tiktactoe__game">
         <el-avatar
           shape="square"
           :size="80"
@@ -9,38 +9,59 @@
         ></el-avatar>
         <h2>{{ game.name }}</h2>
       </div>
-      <div class="tiktactoe__user">
-        <el-avatar
-          :src="inviter.photo || defaultAvatar"
-        ></el-avatar>
-        <template v-if="inviter.name && inviter.lastName">
-          {{ inviter.name }} {{ inviter.lastName }} ({{ inviter.nickname }})
-        </template>
-        <template v-else>
-          {{ inviter.nickname }}
-        </template>
-      </div>
-      <div class="tiktactoe__score">
-        0:0
-      </div>
-      <div class="tiktactoe__user">
-        <template v-if="acceptor.name && acceptor.lastName">
-          {{ acceptor.name }} {{ acceptor.lastName }} ({{ acceptor.nickname }})
-        </template>
-        <template v-else>
-          {{ acceptor.nickname }}
-        </template>
-        <el-avatar
-          :src="acceptor.photo || defaultAvatar"
-        ></el-avatar>
-      </div>
+      <template v-if="inviter && acceptor">
+        <c-user :user="inviter"></c-user>
+        <div class="tiktactoe__score">
+          <span>{{ inviterScore }}</span>
+          <span>:</span>
+          <span>{{ acceptorScore }}</span>
+        </div>
+        <c-user :user="acceptor" :reverse="true"></c-user>
+      </template>
     </div>
-    <div class="tiktactoe__field">
+    <div
+      class="tiktactoe__field"
+      :class="{
+        inactive: turnOwner !== user?.id,
+        finished: isGameFinished
+      }"
+    >
         <template v-for="(row, i) in field" :key="i">
-          <template v-for="(col, j) in row" :key="j">
-            <div class="tiktactoe__cell">{{ col }}</div>
+          <template v-for="(cell, j) in row" :key="j">
+            <div
+              @click="setSign(i, j)"
+              class="tiktactoe__cell"
+              :class="{'tiktactoe__cell--win': cell.winCell}"
+            >
+              <img
+                v-if="cell.sign === Signs.Cross"
+                :src="closeSign"
+              >
+              <img
+                v-if="cell.sign === Signs.Zero"
+                :src="circleSign"
+              >
+            </div>
           </template>
         </template>
+        <div
+          v-if="winner"
+          class="tiktactoe__win_message"
+        >
+          <c-user :user="winner"/>
+          <span class="tiktactoe__win_content">
+            has won
+          </span>
+          <el-progress type="circle" :percentage="reloadingPercentage" status="success">
+            <template #default>
+              <div class="tiktactoe__win_reloader">
+                <span >game will restart in</span>
+                <span class="tiktactoe__win_time">{{ reloadingTime }}</span>
+                <span>seconds</span>
+              </div>
+            </template>
+          </el-progress>
+        </div>
     </div>
   </div>
 </template>
@@ -49,47 +70,198 @@
 import { GameStoreInterface } from '@/models/Store/GameStoreInterface';
 import { UserStoreInterface } from '@/models/Store/UserStoreInterface';
 import {
-  computed, defineComponent, inject, onMounted,
+  computed, defineComponent, inject, onMounted, reactive, ref, watch, watchEffect,
 } from 'vue';
 import defaultAvatar from '@/assets/default_user.png';
-import { useRoute } from 'vue-router';
-import { Game } from '@doer/entities';
+import closeSign from '@/assets/close.svg';
+import circleSign from '@/assets/circle.svg';
+import { GameMessage, User } from '@doer/entities';
+import defaultGameStore from '@/store/gameStore';
+import defaultUserStore from '@/store/userStore';
+import CUser from '@/components/User.vue';
+import {
+  checkWinner, Data,
+  GameMessageData, getField, Signs,
+} from './TikTacToeHelper';
 
 export default defineComponent({
+  components: { CUser },
   setup() {
-    const route = useRoute();
-    const userStore = inject<UserStoreInterface>('user');
-    const gameStore = inject<GameStoreInterface>('game');
-    const inviter = computed(() => gameStore?.state.inviter);
-    const acceptor = computed(() => gameStore?.state.acceptor);
-    const game = computed(() => {
-      if (gameStore?.state.game) return gameStore?.state.game;
-
-      const { groups: { gameId } } = route.path.match(/\/games\/(?<gameId>.+)/) as any;
-      return gameStore?.state.games.find((g: Game) => g.strId === gameId);
-    });
-    const field = [
-      ['', '', ''],
-      ['', '', ''],
-      ['', '', ''],
-    ];
+    const userStore = inject<UserStoreInterface>('user', defaultUserStore);
+    const gameStore = inject<GameStoreInterface>('game', defaultGameStore);
+    const user = computed(() => userStore.state.user as User);
+    const inviter = computed(() => gameStore.state.inviter as User);
+    const acceptor = computed(() => gameStore.state.acceptor as User);
+    const inviterScore = ref(0);
+    const acceptorScore = ref(0);
+    const isInviter = computed(() => inviter.value.id === user.value.id);
+    const sign = computed(() => (isInviter.value ? Signs.Cross : Signs.Zero));
+    const game = computed(() => gameStore.state.currentGame);
+    const isGameFinished = computed(() => gameStore.state.isGameFinished);
 
     return {
-      field,
-      defaultAvatar,
+      user,
       inviter,
       acceptor,
+      inviterScore,
+      acceptorScore,
       game,
+      isGameFinished,
+      isInviter,
+      sign,
 
       userStore,
       gameStore,
     };
+  },
+  data() {
+    return {
+      Signs,
+      closeSign,
+      circleSign,
+      defaultAvatar,
+      turnOwner: -1,
+      field: getField(),
+      winner: null,
+      reloadingPercentage: 0,
+      reloadingTime: 3,
+    } as Data;
+  },
+  watch: {
+    inviter(newInviter) {
+      this.turnOwner = newInviter.id;
+    },
+  },
+  methods: {
+    /**
+     * Returns boolean that represents whether
+     * winning combination is detected
+     * Updates field's cells to highlight winning cells
+     *
+     * @return {boolean}
+    */
+    checkGameStatus(): boolean {
+      const winningCombo = checkWinner(this.field);
+      if (winningCombo.length) {
+        winningCombo.forEach(([y, x]) => {
+          this.field[y][x].winCell = true;
+        });
+        this.gameStore.finishGame();
+        return true;
+      }
+      return false;
+    },
+    /**
+     * Function just sends notification to another user
+     * with actuals state of game
+     *
+     * @return {void}
+    */
+    notifyAnotherUser(): void {
+      const message: GameMessage<GameMessageData> = {
+        data: {
+          field: this.field,
+          isGameFinished: !!this.isGameFinished,
+          winner: (this.isInviter ? this.inviter : this.acceptor) as User,
+        },
+        to: (this.isInviter ? this.acceptor : this.inviter) as User,
+      };
+      if (this.isGameFinished) {
+        this.setWinner(message.data.winner);
+      }
+      this.gameStore.socket.emit('game message', message);
+    },
+    /**
+     * Function toggles turn from user to user
+     *
+     * @return {void}
+    */
+    toggleTurn(): void {
+      // updated current turn to make field inactive
+      this.turnOwner = this.turnOwner === this.inviter.id
+        ? this.acceptor.id
+        : this.inviter.id;
+    },
+    /**
+     * If it is current user's turn
+     * amnd clicked cell is not filled
+     * then user's sign sets to current cell
+     * Game status checks to detect winning situation
+     * Turn switches to another user
+     * Another user notifies
+     *
+     * @param {number} y coordinate of cell
+     * @param {number} x coordinate of cell
+     * @return {void}
+    */
+    setSign(i: number, j: number): void {
+      if (this.turnOwner !== this.user.id) return;
+      if (this.field[i][j].sign !== Signs.Empty) return;
+
+      // fill cell with necessary symbols
+      this.field[i][j].sign = this.sign;
+
+      this.checkGameStatus();
+      this.toggleTurn();
+      this.notifyAnotherUser();
+    },
+    /**
+     * Function updates score, shows message and refreshes game
+     *
+     * @returns {void}
+    */
+    setWinner(winner: User) {
+      this.winner = winner;
+      const isInviter = this.inviter.id === winner.id;
+      isInviter ? this.inviterScore++ : this.acceptorScore++;
+
+      const reloadingTime = 3000;
+      const startTime = new Date().getTime();
+      const timer = setInterval(() => {
+        const currentTime = new Date().getTime();
+        const timeDiff = currentTime - startTime;
+        if (timeDiff > reloadingTime) {
+          clearInterval(timer);
+          this.restartGame();
+        }
+
+        this.reloadingPercentage = (timeDiff / reloadingTime) * 100;
+        this.reloadingTime = Math.round((reloadingTime - timeDiff) / 1000);
+      }, 100);
+    },
+    /**
+     * Function restarts game by
+     * clearing field
+     * clearing winner
+     * and switching isGameFinished flag
+     *
+     * @return {void}
+    */
+    restartGame() {
+      this.winner = null;
+      this.field = getField();
+      this.gameStore.startGame();
+      this.reloadingPercentage = 0;
+      this.reloadingTime = 3;
+    },
+  },
+  mounted() {
+    this.gameStore.socket.on('game message', (mesage: GameMessage<GameMessageData>) => {
+      const { data: { field, isGameFinished, winner } } = mesage;
+      Object.assign(this.field, field);
+      if (isGameFinished && winner) {
+        this.gameStore.finishGame();
+        this.setWinner(winner);
+      }
+      this.toggleTurn();
+    });
   },
 });
 </script>
 
 <style lang="scss">
 .tiktactoe {
+  user-select: none;
   &__ {
     &head {
       display: grid;
@@ -101,6 +273,7 @@ export default defineComponent({
       padding: 12px 0;
     }
     &field {
+      position: relative;
       display: grid;
       grid-template-rows: repeat(3, 1fr);
       grid-template-columns: repeat(3, 1fr);
@@ -108,21 +281,85 @@ export default defineComponent({
       max-width: 450px;
       height: 100vw;
       max-height: 450px;
-    }
-    &cell {
-      border: 1px solid grey;
-    }
-    &user, &score {
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
+      cursor: pointer;
 
-      .el-avatar {
-        min-width: 40px;
+      &.inactive {
+        cursor: not-allowed;
+      }
+      &.finished {
+        opacity: .8;
+        pointer-events: none;
       }
     }
-    &user {
-      justify-content: space-between;
+    &win {
+      &_message {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        background: #0c0c0ca3;
+        color: #fff;
+      }
+      &_content {
+        margin: 10px 0;
+        font-size: 30px;
+        text-transform: uppercase;
+      }
+      &_reloader {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        font-size: 12px;
+      }
+      &_time {
+        font-size: 30px;
+      }
+    }
+    &cell {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid grey;
+
+      img {
+        width: 90%;
+        animation: appear .5s ;
+        transform: scale(1);
+        transition: all ease .2s;
+      }
+
+      &--win {
+        background: #fff4e2;
+      }
+
+      &--win img {
+        transform: scale(1.1);
+      }
+
+      @keyframes appear {
+        0% {
+          transform: scale(0.8);
+        }
+        80% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+    }
+    &score  {
+      text-align: center;
+      font-size: 30px;
+      span {
+        padding: 0 10px;
+      }
     }
     &game {
       grid-column: 1/5;

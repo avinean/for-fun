@@ -22,7 +22,10 @@ module.exports = {
     'import/no-unresolved': 'off',
     'no-throw-literal': 'off',
     'import/no-cycle': 'off',
-    'import/prefer-default-export': 'off'
+    'import/prefer-default-export': 'off',
+    'no-continue': 'off',
+    'consistent-return': 'off',
+    'no-plusplus': 'off'
   },
   overrides: [
     {

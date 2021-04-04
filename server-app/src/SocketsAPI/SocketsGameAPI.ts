@@ -1,4 +1,4 @@
-import { GameRequest, Message, User } from "@doer/entities";
+import { GameMessage, GameRequest, Message, User } from "@doer/entities";
 import { Socket } from "socket.io";
 import { DefaultEventsMap } from "socket.io/dist/typed-events";
 import db from "../DataBase/DataBase";
@@ -24,6 +24,13 @@ export default class SocketsGameAPI {
       const config: UserConfig = UsersStore.getByUserID(invitation.inviter.id);
       if (config) {
         this.socket.to(config.socketId).emit('accept invitation to game', invitation);
+      }
+    });
+
+    this.socket.on('game message', (msg: GameMessage<any>) => {
+      const config: UserConfig = UsersStore.getByUserID(msg.to.id);
+      if (config) {
+        this.socket.to(config.socketId).emit('game message', msg);
       }
     });
   }

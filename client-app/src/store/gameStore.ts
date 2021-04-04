@@ -1,5 +1,4 @@
-import { reactive, readonly } from 'vue';
-import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router';
+import { computed, reactive, readonly } from 'vue';
 import { GameStateInterface, GameStoreInterface } from '@/models/Store/GameStoreInterface';
 import { Game, GameRequest, User } from '@doer/entities';
 import router from '@/router';
@@ -12,13 +11,21 @@ import userStore from './userStore';
 
 socket.init();
 
-const state = reactive<GameStateInterface>({
+const state: any = reactive<GameStateInterface>({
   games: [],
   gamesLoading: false,
+  currentGame: computed(() => {
+    const route = router.currentRoute.value;
+    const match = route.path.match(/\/games\/(?<gameId>.+)/) as any;
+    if (!match) return;
+    const { groups: { gameId } } = match;
+    return state.games.find((game: Game) => game.strId === gameId);
+  }),
 
   inviter: null,
   acceptor: null,
   game: null,
+  isGameFinished: true,
   isWaitingForGame: false,
 
   acceptGame: () => {},
@@ -29,6 +36,7 @@ const clearState = () => {
   state.inviter = null;
   state.acceptor = null;
   state.game = null;
+  state.isGameFinished = true;
   state.isWaitingForGame = false;
   state.acceptGame = () => {};
   state.cancelGame = () => {};
@@ -42,6 +50,15 @@ const loadGames = () => {
   }).finally(() => {
     store.loading(false);
   });
+};
+
+const finishGame = () => {
+  console.log('finish');
+  state.isGameFinished = true;
+};
+
+const startGame = () => {
+  state.isGameFinished = false;
 };
 
 const sendInvitation = (user: User) => {
@@ -66,6 +83,7 @@ const onGameAcception = (inviter: User, acceptor: User, game: Game) => {
   state.inviter = inviter;
   state.acceptor = acceptor;
   state.game = game;
+  state.isGameFinished = false;
   router.push(`${PageRoutes.Games}/${game.strId}`);
 };
 
@@ -133,9 +151,10 @@ export default {
   setUsers,
   loadGames,
   sendInvitation,
+  finishGame,
+  startGame,
 } as GameStoreInterface;
 
 socket.on('accept invitation to game', ({ inviter, acceptor, game }) => {
-  console.log(123);
   onGameAcception(inviter, acceptor, game);
 });
