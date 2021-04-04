@@ -21,10 +21,10 @@
     </div>
     <div
       class="tiktactoe__field"
-      :class="{
+      :class="[{
         inactive: turnOwner !== user?.id,
         finished: isGameFinished
-      }"
+      }, `tiktactoe__field--${cellsCount}`]"
     >
         <template v-for="(row, i) in field" :key="i">
           <template v-for="(cell, j) in row" :key="j">
@@ -45,13 +45,20 @@
           </template>
         </template>
         <div
-          v-if="winner"
+          v-if="showWinner"
           class="tiktactoe__win_message"
         >
-          <c-user :user="winner"/>
-          <span class="tiktactoe__win_content">
-            has won
-          </span>
+          <template v-if="winner">
+            <c-user :user="winner"/>
+            <span class="tiktactoe__win_content">
+              has won
+            </span>
+          </template>
+          <template v-else>
+            <span class="tiktactoe__win_content">
+              The game is draw
+            </span>
+          </template>
           <el-progress type="circle" :percentage="reloadingPercentage" status="success">
             <template #default>
               <div class="tiktactoe__win_reloader">
@@ -62,6 +69,9 @@
             </template>
           </el-progress>
         </div>
+    </div>
+    <div>
+      {{ turns }}
     </div>
   </div>
 </template>
@@ -86,6 +96,16 @@ import {
 
 export default defineComponent({
   components: { CUser },
+  props: {
+    cellsCount: {
+      type: Number,
+      default: 3,
+    },
+    winCombo: {
+      type: Number,
+      default: 3,
+    },
+  },
   setup() {
     const userStore = inject<UserStoreInterface>('user', defaultUserStore);
     const gameStore = inject<GameStoreInterface>('game', defaultGameStore);
@@ -94,7 +114,7 @@ export default defineComponent({
     const acceptor = computed(() => gameStore.state.acceptor as User);
     const inviterScore = ref(0);
     const acceptorScore = ref(0);
-    const isInviter = computed(() => inviter.value.id === user.value.id);
+    const isInviter = computed(() => inviter.value?.id === user.value?.id);
     const sign = computed(() => (isInviter.value ? Signs.Cross : Signs.Zero));
     const game = computed(() => gameStore.state.currentGame);
     const isGameFinished = computed(() => gameStore.state.isGameFinished);
@@ -121,8 +141,10 @@ export default defineComponent({
       circleSign,
       defaultAvatar,
       turnOwner: -1,
-      field: getField(),
+      field: getField(this.cellsCount),
+      turns: [],
       winner: null,
+      showWinner: false,
       reloadingPercentage: 0,
       reloadingTime: 3,
     } as Data;
@@ -138,18 +160,28 @@ export default defineComponent({
      * winning combination is detected
      * Updates field's cells to highlight winning cells
      *
-     * @return {boolean}
+     * @return {void}
     */
-    checkGameStatus(): boolean {
-      const winningCombo = checkWinner(this.field);
+    checkGameStatus(): void {
+      const winningCombo = checkWinner(this.field, this.winCombo);
       if (winningCombo.length) {
         winningCombo.forEach(([y, x]) => {
           this.field[y][x].winCell = true;
         });
         this.gameStore.finishGame();
-        return true;
+        this.setWinner(this.isInviter ? this.inviter : this.acceptor);
       }
-      return false;
+    },
+    /**
+     * Function just checks if there are free cells
+     *
+     * @return {void}
+    */
+    checkDrawGame() {
+      if (this.turns.length === this.cellsCount ** 2) {
+        this.gameStore.finishGame();
+        this.setWinner();
+      }
     },
     /**
      * Function just sends notification to another user
@@ -162,13 +194,11 @@ export default defineComponent({
         data: {
           field: this.field,
           isGameFinished: !!this.isGameFinished,
-          winner: (this.isInviter ? this.inviter : this.acceptor) as User,
+          winner: this.winner as User,
+          turns: this.turns,
         },
         to: (this.isInviter ? this.acceptor : this.inviter) as User,
       };
-      if (this.isGameFinished) {
-        this.setWinner(message.data.winner);
-      }
       this.gameStore.socket.emit('game message', message);
     },
     /**
@@ -201,7 +231,15 @@ export default defineComponent({
       // fill cell with necessary symbols
       this.field[i][j].sign = this.sign;
 
+      this.turns.push({
+        x: j,
+        y: i,
+        sign: this.sign,
+        ownerId: this.user.id,
+      });
+
       this.checkGameStatus();
+      this.checkDrawGame();
       this.toggleTurn();
       this.notifyAnotherUser();
     },
@@ -210,10 +248,13 @@ export default defineComponent({
      *
      * @returns {void}
     */
-    setWinner(winner: User) {
-      this.winner = winner;
-      const isInviter = this.inviter.id === winner.id;
-      isInviter ? this.inviterScore++ : this.acceptorScore++;
+    setWinner(winner?: User) {
+      this.showWinner = true;
+      if (winner) {
+        this.winner = winner;
+        const isInviter = this.inviter.id === winner.id;
+        isInviter ? this.inviterScore++ : this.acceptorScore++;
+      }
 
       const reloadingTime = 3000;
       const startTime = new Date().getTime();
@@ -223,6 +264,7 @@ export default defineComponent({
         if (timeDiff > reloadingTime) {
           clearInterval(timer);
           this.restartGame();
+          this.showWinner = false;
         }
 
         this.reloadingPercentage = (timeDiff / reloadingTime) * 100;
@@ -239,7 +281,8 @@ export default defineComponent({
     */
     restartGame() {
       this.winner = null;
-      this.field = getField();
+      this.field = getField(this.cellsCount);
+      this.turns = [];
       this.gameStore.startGame();
       this.reloadingPercentage = 0;
       this.reloadingTime = 3;
@@ -247,9 +290,17 @@ export default defineComponent({
   },
   mounted() {
     this.gameStore.socket.on('game message', (mesage: GameMessage<GameMessageData>) => {
-      const { data: { field, isGameFinished, winner } } = mesage;
+      const {
+        data: {
+          field,
+          isGameFinished,
+          winner,
+          turns,
+        },
+      } = mesage;
       Object.assign(this.field, field);
-      if (isGameFinished && winner) {
+      this.turns.push(turns[turns.length - 1]);
+      if (isGameFinished) {
         this.gameStore.finishGame();
         this.setWinner(winner);
       }
@@ -282,6 +333,16 @@ export default defineComponent({
       height: 100vw;
       max-height: 450px;
       cursor: pointer;
+
+      &--3 {
+        grid-template-rows: repeat(3, 1fr);
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      &--19 {
+        grid-template-rows: repeat(19, 1fr);
+        grid-template-columns: repeat(19, 1fr);
+      }
 
       &.inactive {
         cursor: not-allowed;

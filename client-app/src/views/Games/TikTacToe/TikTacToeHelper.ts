@@ -11,10 +11,18 @@ export interface TikTacToeCell {
   winCell: boolean;
 }
 
+export interface Turn {
+  x: number;
+  y: number;
+  sign: Signs;
+  ownerId: number;
+}
+
 export interface GameMessageData {
   field: TikTacToeCell[][];
   winner: User;
   isGameFinished: boolean;
+  turns: Turn[];
 }
 
 export interface Data {
@@ -24,7 +32,9 @@ export interface Data {
   defaultAvatar: any;
   turnOwner: number;
   field: TikTacToeCell[][];
+  turns: Turn[];
   winner: User | null;
+  showWinner: boolean;
   reloadingPercentage: number;
   reloadingTime: number;
 }
@@ -34,8 +44,8 @@ const getCell = (): TikTacToeCell => ({
   winCell: false,
 });
 
-export const getField = (): TikTacToeCell[][] => {
-  const template = [...Array(3)];
+export const getField = (cellsCount = 3): TikTacToeCell[][] => {
+  const template = [...Array(cellsCount)];
   return template.map(() => template.map(() => getCell()));
 };
 
@@ -119,6 +129,5 @@ export const checkWinner = (field: TikTacToeCell[][], cellsCount = 3):
   }
 
   if (winningCombo) return winningCombo;
-
   return [];
 };
