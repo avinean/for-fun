@@ -26,6 +26,7 @@ const logOut: UserStoreInterface['logOut'] = () => {
   localStorage.sessionToken = '';
   localStorage.sessionDate = '';
   state.user = null;
+  window.location.reload();
 };
 const confirmAuthorization: UserStoreInterface['confirmAuthorization'] = () => {
   state.authorization?.resolve();

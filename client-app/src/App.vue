@@ -18,9 +18,9 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import {
-  computed, defineComponent, onMounted, provide,
+  computed, defineComponent, onMounted, provide, watch,
 } from 'vue';
 import store from '@/store/store';
 import CSidebar from '@/components/layout/Sidebar.vue';
@@ -29,6 +29,8 @@ import CFooter from '@/components/layout/Footer.vue';
 import CSignIn from '@/views/Auth/SignIn.vue';
 import CChat from '@/components/Chat.vue';
 import { useRoute } from 'vue-router';
+import socket from '@/services/SocketService';
+import { User } from '@doer/entities';
 import { PageRoutes } from './models/common';
 
 export default defineComponent({
@@ -57,6 +59,12 @@ export default defineComponent({
     onMounted(() => {
       store.userStore.setUser();
       store.gameStore.loadGames();
+    });
+
+    watch(isAuthorized, (is: boolean) => {
+      if (is) {
+        socket.init();
+      }
     });
 
     return {

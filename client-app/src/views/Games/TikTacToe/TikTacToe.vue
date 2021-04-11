@@ -70,9 +70,6 @@
           </el-progress>
         </div>
     </div>
-    <div>
-      {{ turns }}
-    </div>
   </div>
 </template>
 
@@ -109,26 +106,14 @@ export default defineComponent({
   setup() {
     const userStore = inject<UserStoreInterface>('user', defaultUserStore);
     const gameStore = inject<GameStoreInterface>('game', defaultGameStore);
-    const user = computed(() => userStore.state.user as User);
-    const inviter = computed(() => gameStore.state.inviter as User);
-    const acceptor = computed(() => gameStore.state.acceptor as User);
-    const inviterScore = ref(0);
-    const acceptorScore = ref(0);
-    const isInviter = computed(() => inviter.value?.id === user.value?.id);
-    const sign = computed(() => (isInviter.value ? Signs.Cross : Signs.Zero));
     const game = computed(() => gameStore.state.currentGame);
     const isGameFinished = computed(() => gameStore.state.isGameFinished);
+    const gameTemporaryID = computed(() => gameStore.state.gameTemporaryID);
 
     return {
-      user,
-      inviter,
-      acceptor,
-      inviterScore,
-      acceptorScore,
       game,
       isGameFinished,
-      isInviter,
-      sign,
+      gameTemporaryID,
 
       userStore,
       gameStore,
@@ -136,6 +121,11 @@ export default defineComponent({
   },
   data() {
     return {
+      user: null,
+      inviter: null,
+      acceptor: null,
+      isInviter: false,
+      sign: Signs.Cross,
       Signs,
       closeSign,
       circleSign,
@@ -143,6 +133,8 @@ export default defineComponent({
       turnOwner: -1,
       field: getField(this.cellsCount),
       turns: [],
+      inviterScore: 0,
+      acceptorScore: 0,
       winner: null,
       showWinner: false,
       reloadingPercentage: 0,
@@ -153,8 +145,34 @@ export default defineComponent({
     inviter(newInviter) {
       this.turnOwner = newInviter.id;
     },
+    gameTemporaryID() {
+      /**
+       * This watcher is used to detect new accepted game
+       * It works each time when user accepts someone's request
+      */
+      console.log('restart', 'gameTemporaryID');
+      this.startGame();
+    },
+    cellsCount() {
+      console.log('restart', 'cellsCount');
+      this.startGame();
+    },
   },
   methods: {
+    startGame() {
+      const { user } = this.userStore.state;
+      const { inviter, acceptor } = this.gameStore.state;
+
+      this.user = user as User;
+      this.inviter = inviter as User;
+      this.acceptor = acceptor as User;
+      this.isInviter = inviter?.id === user?.id;
+      this.sign = this.isInviter ? Signs.Cross : Signs.Zero;
+      this.inviterScore = 0;
+      this.acceptorScore = 0;
+
+      this.restartGame();
+    },
     /**
      * Returns boolean that represents whether
      * winning combination is detected
@@ -208,9 +226,9 @@ export default defineComponent({
     */
     toggleTurn(): void {
       // updated current turn to make field inactive
-      this.turnOwner = this.turnOwner === this.inviter.id
-        ? this.acceptor.id
-        : this.inviter.id;
+      this.turnOwner = (this.turnOwner === this.inviter?.id
+        ? this.acceptor?.id
+        : this.inviter?.id) ?? -1;
     },
     /**
      * If it is current user's turn
@@ -225,7 +243,7 @@ export default defineComponent({
      * @return {void}
     */
     setSign(i: number, j: number): void {
-      if (this.turnOwner !== this.user.id) return;
+      if (this.turnOwner !== this.user?.id) return;
       if (this.field[i][j].sign !== Signs.Empty) return;
 
       // fill cell with necessary symbols
@@ -235,7 +253,7 @@ export default defineComponent({
         x: j,
         y: i,
         sign: this.sign,
-        ownerId: this.user.id,
+        ownerId: this.user?.id,
       });
 
       this.checkGameStatus();
@@ -248,11 +266,11 @@ export default defineComponent({
      *
      * @returns {void}
     */
-    setWinner(winner?: User) {
+    setWinner(winner?: User | null) {
       this.showWinner = true;
       if (winner) {
         this.winner = winner;
-        const isInviter = this.inviter.id === winner.id;
+        const isInviter = this.inviter?.id === winner.id;
         isInviter ? this.inviterScore++ : this.acceptorScore++;
       }
 
@@ -265,6 +283,7 @@ export default defineComponent({
           clearInterval(timer);
           this.restartGame();
           this.showWinner = false;
+          return;
         }
 
         this.reloadingPercentage = (timeDiff / reloadingTime) * 100;
@@ -280,12 +299,17 @@ export default defineComponent({
      * @return {void}
     */
     restartGame() {
-      this.winner = null;
-      this.field = getField(this.cellsCount);
-      this.turns = [];
+      this.clearGame();
       this.gameStore.startGame();
+    },
+    clearGame() {
+      this.winner = null;
       this.reloadingPercentage = 0;
       this.reloadingTime = 3;
+      console.log(this.cellsCount);
+      this.field = getField(this.cellsCount);
+      console.log(this.field);
+      this.turns = [];
     },
   },
   mounted() {

@@ -25,6 +25,7 @@ const state: any = reactive<GameStateInterface>({
   inviter: null,
   acceptor: null,
   game: null,
+  gameTemporaryID: Math.random(),
   isGameFinished: true,
   isWaitingForGame: false,
 
@@ -36,6 +37,7 @@ const clearState = () => {
   state.inviter = null;
   state.acceptor = null;
   state.game = null;
+  state.gameTemporaryID = Math.random();
   state.isGameFinished = true;
   state.isWaitingForGame = false;
   state.acceptGame = () => {};
@@ -53,7 +55,6 @@ const loadGames = () => {
 };
 
 const finishGame = () => {
-  console.log('finish');
   state.isGameFinished = true;
 };
 
@@ -84,6 +85,7 @@ const onGameAcception = (inviter: User, acceptor: User, game: Game) => {
   state.acceptor = acceptor;
   state.game = game;
   state.isGameFinished = false;
+  state.gameTemporaryID = Math.random();
   router.push(`${PageRoutes.Games}/${game.strId}`);
 };
 
@@ -153,6 +155,7 @@ export default {
   sendInvitation,
   finishGame,
   startGame,
+  clearState,
 } as GameStoreInterface;
 
 socket.on('accept invitation to game', ({ inviter, acceptor, game }) => {

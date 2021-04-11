@@ -10,6 +10,7 @@ export interface GameStateInterface {
   inviter: User | null;
   acceptor: User | null;
   game: Game | null;
+  gameTemporaryID: number;
   isGameFinished: boolean;
   isWaitingForGame: boolean;
 
@@ -26,4 +27,5 @@ export interface GameStoreInterface {
   sendInvitation: (user: User) => void;
   finishGame: () => void;
   startGame: () => void;
+  clearState: () => void;
 }

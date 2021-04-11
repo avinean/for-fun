@@ -67,7 +67,6 @@ import { isPrev } from '@/helpers/message';
 import { getDate } from '@/helpers/date';
 import MessageService from '@/services/MessagesService';
 import socket from '@/services/SocketService';
-import { RouteLocationRaw, useRoute, useRouter } from 'vue-router';
 import { GameStoreInterface } from '@/models/Store/GameStoreInterface';
 
 const messageService = new MessageService();

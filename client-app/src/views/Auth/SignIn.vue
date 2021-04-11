@@ -82,7 +82,6 @@ export default defineComponent({
       authService.signIn(form)
         .then(() => {
           if (store.state.authorization) {
-            store.state.authorization.resolve();
             store.confirmAuthorization();
           }
         })

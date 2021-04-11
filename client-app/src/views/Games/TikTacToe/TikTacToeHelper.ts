@@ -26,6 +26,13 @@ export interface GameMessageData {
 }
 
 export interface Data {
+  user: User | null;
+  inviter: User | null;
+  acceptor: User | null;
+  isInviter: boolean;
+  inviterScore: number;
+  acceptorScore: number;
+  sign: Signs;
   Signs: typeof Signs;
   closeSign: any;
   circleSign: any;
@@ -58,10 +65,12 @@ enum Direction {
 
 export const checkWinner = (field: TikTacToeCell[][], cellsCount = 3):
   [number, number][] => {
+  console.log(cellsCount);
   let sign: Signs;
   let x: number;
   let y: number;
   let winningCombo: [number, number][] = [];
+  // debugger;
 
   const moveTo = (direction: Direction = Direction.ToRight) => {
     let localY = y;
@@ -128,6 +137,7 @@ export const checkWinner = (field: TikTacToeCell[][], cellsCount = 3):
     }
   }
 
+  console.log(winningCombo);
   if (winningCombo) return winningCombo;
   return [];
 };

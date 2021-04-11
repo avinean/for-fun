@@ -31,6 +31,7 @@ export default defineComponent({
 
     const openGame = (game: Game): void => {
       if (game.isUnderDevelopment) return;
+      gameStore?.clearState();
       router.push(`${PageRoutes.Games}/${game.strId}`);
     };
 

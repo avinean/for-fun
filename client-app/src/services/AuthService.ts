@@ -13,7 +13,7 @@ export default class AuthService extends BaseService {
       .then(({ token }: AuthResponse) => {
         localStorage.sessionToken = token;
         localStorage.sessionDate = new Date().toISOString();
-        userStore.setUser();
+        window.location.reload();
       });
   }
 

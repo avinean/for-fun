@@ -4,6 +4,7 @@ import userStore from '@/store/userStore';
 import { Game } from '@doer/entities';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import Home from '../views/Home.vue';
+import TikTacToe from '../views/Games/TikTacToe/TikTacToe.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -60,7 +61,7 @@ const routes: Array<RouteRecordRaw> = [
           winCombo: 3,
         },
         meta: { isGame: true },
-        component: () => import(/* webpackChunkName: "tiktactoe3x3" */ '../views/Games/TikTacToe/TikTacToe.vue'),
+        component: TikTacToe,
       },
       {
         path: 'tiktactoe9x9',
@@ -70,7 +71,7 @@ const routes: Array<RouteRecordRaw> = [
           winCombo: 5,
         },
         meta: { isGame: true },
-        component: () => import(/* webpackChunkName: "tiktactoe9x9" */ '../views/Games/TikTacToe/TikTacToe.vue'),
+        component: TikTacToe,
       },
     ],
   },
