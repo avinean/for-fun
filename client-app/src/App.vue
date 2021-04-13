@@ -11,6 +11,7 @@
       </div>
     </div>
     <div class="pre-footer">
+      <c-online-users />
       <c-chat v-if="isAuthorized" :key="chatKey"/>
     </div>
     <c-footer />
@@ -28,6 +29,7 @@ import CHeader from '@/components/layout/Header.vue';
 import CFooter from '@/components/layout/Footer.vue';
 import CSignIn from '@/views/Auth/SignIn.vue';
 import CChat from '@/components/Chat.vue';
+import COnlineUsers from '@/components/OnlineUsers.vue';
 import { useRoute } from 'vue-router';
 import socket from '@/services/SocketService';
 import { User } from '@doer/entities';
@@ -41,6 +43,7 @@ export default defineComponent({
     CSignIn,
     CSidebar,
     CChat,
+    COnlineUsers,
   },
   setup() {
     provide('message', store.messageStore);
@@ -107,6 +110,8 @@ export default defineComponent({
   bottom: 0;
   left: 0;
   right: 0;
+  display: flex;
+  justify-content: flex-end;
 }
 
 header.header {

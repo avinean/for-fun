@@ -62,16 +62,18 @@ const startGame = () => {
   state.isGameFinished = false;
 };
 
-const sendInvitation = (user: User) => {
+const sendInvitation = (user: User, game: Game) => {
   const route = router.currentRoute.value;
   const currentUser = userStore?.state.user;
   if (user.id === currentUser?.id) return;
-  if (!route.meta.isGame) return;
 
-  const { groups: { gameId } } = route.path.match(/\/games\/(?<gameId>.+)/) as any;
-  const currentGame = state.games.find((game: Game) => game.strId === gameId);
+  let currentGame = game;
+  if (!currentGame) {
+    const { groups: { gameId } } = route.path.match(/\/games\/(?<gameId>.+)/) as any;
+    currentGame = state.games.find((g: Game) => g.strId === gameId);
 
-  if (!currentGame) return;
+    if (!currentGame) return;
+  }
 
   socket.emit('invite to game', {
     inviter: currentUser,
@@ -159,5 +161,11 @@ export default {
 } as GameStoreInterface;
 
 socket.on('accept invitation to game', ({ inviter, acceptor, game }) => {
+  console.log(state.isGameFinished);
+  if (!state.isGameFinished) return;
   onGameAcception(inviter, acceptor, game);
+});
+
+socket.on('invite to game', async (request: GameRequest) => {
+  setUsers(request);
 });

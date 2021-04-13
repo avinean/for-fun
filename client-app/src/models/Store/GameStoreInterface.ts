@@ -24,7 +24,7 @@ export interface GameStoreInterface {
 
   setUsers: (request: GameRequest) => void;
   loadGames: ()=> void;
-  sendInvitation: (user: User) => void;
+  sendInvitation: (user: User, game: Game) => void;
   finishGame: () => void;
   startGame: () => void;
   clearState: () => void;

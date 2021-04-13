@@ -109,7 +109,7 @@ export const checkWinner = (field: TikTacToeCell[][], cellsCount = 3):
       for (;localY < cellsCount;) {
         if (field[localY][localX].sign !== sign) return;
         localWinningCombo.push([localY, localX]);
-        localX -= 1;
+        localX--;
         localY++;
       }
     }

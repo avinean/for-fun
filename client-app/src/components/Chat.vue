@@ -22,7 +22,6 @@
                   <el-avatar
                     :src="user.photo || defaultAvatar"
                     class="chatbox__avatar"
-                    @click="inviteToGame(user)"
                   ></el-avatar>
                 </div>
                 <div>
@@ -119,10 +118,6 @@ export default defineComponent({
         });
         scrollToBottom();
       });
-
-      socket.on('invite to game', async (request: GameRequest) => {
-        gameStore?.setUsers(request);
-      });
     });
 
     return {
@@ -133,7 +128,6 @@ export default defineComponent({
       isCollapsed,
       send,
       getDate,
-      inviteToGame: gameStore?.sendInvitation,
     };
   },
 });
@@ -142,8 +136,8 @@ export default defineComponent({
 <style lang="scss">
   .chatbox {
     position: absolute;
-    bottom: 0;
     right: 0;
+    bottom: 0;
     z-index: 14;
     width: 320px;
     max-width: 100vw;

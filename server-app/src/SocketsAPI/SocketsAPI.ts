@@ -4,10 +4,10 @@ import secret from '../secret/auth';
 import SocketsChatAPI from "./SocketsChatAPI";
 import SocketsGameAPI from "./SocketsGameAPI";
 import UsersStore from "./UsersStore";
+import SocketsUserAPI from "./SocketsUserAPI";
 
 export default class SocketsAPI {
   private io: Server;
-  private users: {[key: string]: string} = {};
 
   constructor(http: http.Server) {
     this.io = new Server(http, {
@@ -16,18 +16,6 @@ export default class SocketsAPI {
       },
     });
     this.initAPI();
-
-
-
-    setInterval(() => {
-      console.log(UsersStore.users.map((user) => {
-        return {
-          socketId: user.socketId,
-          userId: user.user.id
-        }
-      }));
-    }, 2000);
-
   }
 
   private initAPI(): void {
@@ -51,6 +39,10 @@ export default class SocketsAPI {
   private async onConnection(socket) {
     console.log(`user ${socket.user.nickname} connected`);
 
+    // const emitUsersUpdate = () => {
+    //   socket.emit('online users update', UsersStore.users.map(({ user }) => user));
+    // };
+
     UsersStore.add({
       socketId: socket.id,
       user: socket.user,
@@ -62,5 +54,8 @@ export default class SocketsAPI {
 
     new SocketsChatAPI(socket);
     new SocketsGameAPI(socket);
+    new SocketsUserAPI(socket);
   }
+
+
 }

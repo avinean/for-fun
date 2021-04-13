@@ -64,8 +64,8 @@ const routes: Array<RouteRecordRaw> = [
         component: TikTacToe,
       },
       {
-        path: 'tiktactoe9x9',
-        name: 'TikTacToe9x9',
+        path: 'tiktactoe19x19',
+        name: 'TikTacToe19x19',
         props: {
           cellsCount: 19,
           winCombo: 5,

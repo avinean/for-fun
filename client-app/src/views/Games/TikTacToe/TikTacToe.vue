@@ -150,11 +150,9 @@ export default defineComponent({
        * This watcher is used to detect new accepted game
        * It works each time when user accepts someone's request
       */
-      console.log('restart', 'gameTemporaryID');
       this.startGame();
     },
     cellsCount() {
-      console.log('restart', 'cellsCount');
       this.startGame();
     },
   },
@@ -306,9 +304,7 @@ export default defineComponent({
       this.winner = null;
       this.reloadingPercentage = 0;
       this.reloadingTime = 3;
-      console.log(this.cellsCount);
       this.field = getField(this.cellsCount);
-      console.log(this.field);
       this.turns = [];
     },
   },
@@ -330,6 +326,9 @@ export default defineComponent({
       }
       this.toggleTurn();
     });
+  },
+  unmounted() {
+    this.gameStore.clearState();
   },
 });
 </script>
