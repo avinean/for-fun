@@ -5,11 +5,35 @@ import router from '@/router';
 import socket from '@/services/SocketService';
 import { PageRoutes } from '@/models/common';
 import GameService from '@/services/GameService';
+import { INotificationHandle } from 'element-plus/lib/el-notification/src/notification.type';
 import store from './store';
 import messageStore from './messageStore';
 import userStore from './userStore';
 
 socket.init();
+
+/**
+ * Invitation logic
+ *
+ * There are two users: acceptor and inviter
+ * inviter: sendInvitation
+ * acceptor: listens to 'invite to game' and opens confirmation window
+ *      acceptor: clicks 'cancel' -> confirmation window hides.
+ *                @TODO send cancelation to inviter to stop pending
+ *      acceptor: clicks 'accept' -> onGameAcception runs and inviter
+ *                notifies with 'accept invitation to game'
+ * inviter: listens to 'accept invitation to game' and runs onGameAcception
+ *          @TODO send cancelations to other acceptors from pending list
+ *
+*/
+
+interface InvitationWindow {
+  notification: INotificationHandle;
+  inviterID: number;
+  gameId: string;
+}
+
+const invitationWindows: InvitationWindow[] = [];
 
 const state: any = reactive<GameStateInterface>({
   games: [],
@@ -27,7 +51,8 @@ const state: any = reactive<GameStateInterface>({
   game: null,
   gameTemporaryID: Math.random(),
   isGameFinished: true,
-  isWaitingForGame: false,
+  isGameRunning: computed(() => Boolean(state.inviter && state.acceptor)),
+  pendingUsers: [],
 
   acceptGame: () => {},
   cancelGame: () => {},
@@ -39,7 +64,7 @@ const clearState = () => {
   state.game = null;
   state.gameTemporaryID = Math.random();
   state.isGameFinished = true;
-  state.isWaitingForGame = false;
+  state.pendingUsers = [];
   state.acceptGame = () => {};
   state.cancelGame = () => {};
 };
@@ -75,6 +100,8 @@ const sendInvitation = (user: User, game: Game) => {
     if (!currentGame) return;
   }
 
+  state.pendingUsers = [...state.pendingUsers, user.id];
+
   socket.emit('invite to game', {
     inviter: currentUser,
     acceptor: user,
@@ -91,10 +118,24 @@ const onGameAcception = (inviter: User, acceptor: User, game: Game) => {
   router.push(`${PageRoutes.Games}/${game.strId}`);
 };
 
+const closeInvitations = (inviter: User, acceptor: User, game: Game) => {
+  console.log(state.pendingUsers);
+  socket.emit('close invitation to game', {
+    ids: state.pendingUsers,
+    invitation: { inviter, acceptor, game },
+  });
+  console.log(state.pendingUsers);
+  state.pendingUsers = [];
+};
+
 const acceptInvitation = (inviter: User, acceptor: User, game: Game) => {
   onGameAcception(inviter, acceptor, game);
 
   socket.emit('accept invitation to game', { inviter, acceptor, game });
+};
+
+const cancelInvitation = (inviter: User, acceptor: User, game: Game) => {
+  socket.emit('cancel invitation to game', { inviter, acceptor, game });
 };
 
 const setUsers = ({ inviter, acceptor, game }: GameRequest) => {
@@ -140,11 +181,18 @@ const setUsers = ({ inviter, acceptor, game }: GameRequest) => {
     onClick: (...[{ target }]: Event[]) => {
       if ((target as Element).closest('[data-invite-close]')) {
         notification.close();
+        cancelInvitation(inviter, acceptor, game);
       } else if ((target as Element).closest('[data-invite-accept]')) {
         notification.close();
         acceptInvitation(inviter, acceptor, game);
       }
     },
+  });
+
+  invitationWindows.push({
+    notification,
+    inviterID: inviter.id,
+    gameId: game.strId,
   });
 };
 
@@ -161,11 +209,25 @@ export default {
 } as GameStoreInterface;
 
 socket.on('accept invitation to game', ({ inviter, acceptor, game }) => {
-  console.log(state.isGameFinished);
-  if (!state.isGameFinished) return;
+  if (!state.pendingUsers.length) return;
+  closeInvitations(inviter, acceptor, game);
   onGameAcception(inviter, acceptor, game);
+});
+
+socket.on('cancel invitation to game', ({ inviter, acceptor, game }) => {
+  const index = state.pendingUsers.indexOf(acceptor.id);
+  if (index < 0) return;
+  state.pendingUsers.splice(index, 1);
 });
 
 socket.on('invite to game', async (request: GameRequest) => {
   setUsers(request);
+});
+
+socket.on('close invitation to game', ({ inviter, game }: GameRequest) => {
+  const config = invitationWindows.find(({ inviterID, gameId }) => (
+    inviterID === inviter.id && gameId === game.strId
+  ));
+
+  if (config) config.notification.close();
 });

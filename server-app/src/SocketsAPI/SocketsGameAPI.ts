@@ -27,6 +27,23 @@ export default class SocketsGameAPI {
       }
     });
 
+    this.socket.on('cancel invitation to game', (invitation: GameRequest) => {
+      const config: UserConfig = UsersStore.getByUserID(invitation.inviter.id);
+      if (config) {
+        this.socket.to(config.socketId).emit('cancel invitation to game', invitation);
+      }
+    });
+
+    this.socket.on('close invitation to game', ({ ids, invitation }: { ids: number[], invitation: GameRequest}) => {
+      console.log(ids);
+      ids.forEach((id) => {
+        const config: UserConfig = UsersStore.getByUserID(id);
+        if (config) {
+          this.socket.to(config.socketId).emit('close invitation to game', invitation);
+        }
+      });
+    });
+
     this.socket.on('game message', (msg: GameMessage<any>) => {
       const config: UserConfig = UsersStore.getByUserID(msg.to.id);
       if (config) {

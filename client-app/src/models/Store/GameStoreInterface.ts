@@ -12,7 +12,8 @@ export interface GameStateInterface {
   game: Game | null;
   gameTemporaryID: number;
   isGameFinished: boolean;
-  isWaitingForGame: boolean;
+  isGameRunning: ComputedRef<boolean>;
+  pendingUsers: number[];
 
   acceptGame: any;
   cancelGame: any;

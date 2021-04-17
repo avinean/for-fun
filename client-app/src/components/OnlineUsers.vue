@@ -1,5 +1,8 @@
 <template>
-    <div class="online-users">
+    <div
+      v-if="!isGameRunning"
+      class="online-users"
+    >
       <div class="online-users__header">
         <span>Currently online</span>
         <div class="spacer" />
@@ -27,12 +30,15 @@
                 </template>
               </div>
               <el-dropdown
-                size="mini"
-                split-button
-                type="primary"
                 @command="inviteToGame(user, $event)"
               >
-                Invite
+                <el-button
+                  type="primary"
+                  size="mini"
+                  :loading="pendingUsers.includes(user.id)"
+                >
+                  Invite
+                </el-button>
                 <template #dropdown>
                   <el-dropdown-menu>
                     <el-dropdown-item
@@ -86,14 +92,18 @@ export default defineComponent({
     const userStore = inject<UserStoreInterface>('user');
     const isCollapsed = ref<boolean>(false);
     const games = computed(() => gameStore?.state.games || []);
+    const pendingUsers = computed(() => gameStore?.state.pendingUsers || []);
+    const isGameRunning = computed(() => gameStore?.state.isGameRunning);
     const user = computed(() => userStore?.state.user);
 
     return {
+      isGameRunning,
       defaultAvatar,
       defaultImage,
       isCollapsed,
       inviteToGame: gameStore?.sendInvitation,
       games,
+      pendingUsers,
       user,
     };
   },

@@ -150,9 +150,11 @@ export default defineComponent({
        * This watcher is used to detect new accepted game
        * It works each time when user accepts someone's request
       */
+      console.log('start');
       this.startGame();
     },
     cellsCount() {
+      console.log('start cell');
       this.startGame();
     },
   },
@@ -309,6 +311,7 @@ export default defineComponent({
     },
   },
   mounted() {
+    this.startGame();
     this.gameStore.socket.on('game message', (mesage: GameMessage<GameMessageData>) => {
       const {
         data: {
