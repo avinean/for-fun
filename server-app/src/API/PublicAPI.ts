@@ -1,6 +1,6 @@
 
 import { Routes } from '@doer/entities';
-import secret from '../secret/auth';
+import secret from '../Services/AuthService';
 import BaseAPI from './BaseAPI';
 
 export default class PublicAPI extends BaseAPI {

@@ -1,6 +1,6 @@
 import { User } from '@doer/entities';
 import BaseAPI from './BaseAPI';
-import secret from '../secret/auth';
+import secret from '../Services/AuthService';
 
 export default class UserAPI extends BaseAPI {
   onGet(req, res) {

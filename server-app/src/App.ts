@@ -5,7 +5,7 @@ import cors from 'cors';
 import { Routes } from '@doer/entities';
 import PublicAPI from './API/PublicAPI';
 import UserAPI from './API/UserAPI';
-import secret from './secret/auth';
+import secret from './Services/AuthService';
 import BaseAPI from './API/BaseAPI';
 import ChatAPI from './API/MessageAPI';
 import SocketsAPI from './SocketsAPI/SocketsAPI';

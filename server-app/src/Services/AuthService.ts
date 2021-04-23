@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import db from "../DataBase/DataBase";
 import { AuthRequest, RegistrationRequest, User } from '@doer/entities';
 
-const key = "abcdefghijklsnopqrstuvwx";
+const key = process.env.DECRYPTION_KEY;
 
 const hash = ({ email, pass }: Partial<RegistrationRequest>): string => {
   const secret = `${email}:${pass}`;

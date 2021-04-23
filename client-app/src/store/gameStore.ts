@@ -225,9 +225,9 @@ socket.on('invite to game', async (request: GameRequest) => {
 });
 
 socket.on('close invitation to game', ({ inviter, game }: GameRequest) => {
-  const config = invitationWindows.find(({ inviterID, gameId }) => (
-    inviterID === inviter.id && gameId === game.strId
-  ));
-
-  if (config) config.notification.close();
+  const config = invitationWindows.forEach(({ inviterID, gameId, notification }) => {
+    if (inviterID === inviter.id && gameId === game.strId) {
+      notification.close();
+    }
+  });
 });

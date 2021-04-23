@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import http from 'http';
-import secret from '../secret/auth';
+import secret from '../Services/AuthService';
 import SocketsChatAPI from "./SocketsChatAPI";
 import SocketsGameAPI from "./SocketsGameAPI";
 import UsersStore from "./UsersStore";

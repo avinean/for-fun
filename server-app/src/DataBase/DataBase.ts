@@ -1,5 +1,4 @@
 import pgPromise from 'pg-promise';
-import * as config from '../secret/config.json';
 
 const camelizeColumns = (data) => {
   const tmp = data[0];
@@ -21,6 +20,12 @@ const initOptions = {
   }
 };
 
-const db = pgPromise(initOptions)(config);
+const db = pgPromise(initOptions)({
+  "host": process.env.DB_HOST,
+  "port": +process.env.DB_PORT,
+  "database": process.env.DB,
+  "user": process.env.DB_USER,
+  "password": process.env.DB_PASSWORD
+});
 
 export default db;
