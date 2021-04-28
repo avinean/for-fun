@@ -5,7 +5,11 @@ export interface QueryOptions {
 
 export enum PageRoutes {
   Home = '/',
-  Registration = '/registration',
+  Auth = '/auth',
+  Registration = 'registration',
+  ConfirmEmail = 'confirm-email',
+  RestorePassword = 'restore-password',
+  ResetPassword = 'reset-password',
   Account = '/account',
   About = '/about',
   Games = '/games',

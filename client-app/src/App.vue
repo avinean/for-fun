@@ -11,7 +11,7 @@
       </div>
     </div>
     <div class="pre-footer">
-      <c-online-users />
+      <c-online-users v-if="isAuthorized"/>
       <c-chat v-if="isAuthorized" :key="chatKey"/>
     </div>
     <c-footer />
@@ -134,6 +134,26 @@ header.header {
 
   .header {
     margin-bottom: 40px;
+  }
+
+  &__header {
+    margin-bottom: 40px;
+  }
+
+  &__body {
+    max-width: 696px;
+  }
+
+  &__footer {
+    display: flex;
+
+    &--right {
+      justify-content: flex-end;
+    }
+  }
+
+  &--mini {
+    max-width: 696px;
   }
 }
 

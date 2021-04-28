@@ -24,11 +24,11 @@ export default class UserAPI extends BaseAPI {
         photo = $5,
         hash = COALESCE($6, hash)
       WHERE id = $7
-    `, [ nickname, name, lastName, age, photo, hash, id ]
+    `, [ nickname, name, lastName, +age, photo, hash, id ]
     ).then(() => {
       res.send(req.body);
     }).catch((err) => {
-      res.send(err);
+      res.status(400).send(err);
     });
   }
 }

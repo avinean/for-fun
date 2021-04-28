@@ -11,6 +11,7 @@ const state = reactive<State>({
 const loading: Store['loading'] = (load) => {
   load ? state.globalLoader++ : state.globalLoader -= 1;
 };
+
 export default {
   state: readonly(state),
   messageStore,

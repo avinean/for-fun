@@ -36,9 +36,9 @@ class App {
     this.app.use(bodyParser.json());
     this.app.use(cors());
     // test
-    this.app.use((_, __, next) => {
-      setTimeout(next, 2000);
-    });
+    // this.app.use((_, __, next) => {
+    //   setTimeout(next, 2000);
+    // });
     // logger
     this.app.use((req, res, next) => {
       console.log(`[${req.method}] ${req.originalUrl} ${new Date().toISOString()}`);

@@ -12,7 +12,7 @@ export default class SocketsAPI {
   constructor(http: http.Server) {
     this.io = new Server(http, {
       cors: {
-        origin: 'http://127.0.0.1:8080',
+        origin: process.env.BASE_URL,
       },
     });
     this.initAPI();

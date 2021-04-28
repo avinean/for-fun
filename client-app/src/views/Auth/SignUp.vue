@@ -1,13 +1,8 @@
 <template>
-  <div class="signup">
-    <el-dialog
-      v-model="show"
-      title="Create an account"
-      :close-on-press-escape="false"
-      :close-on-click-modal="false"
-      width="600px"
-      @close="cancel"
-    >
+  <div class="signup container container--mini">
+    <h1 class="container__header">Create an account</h1>
+
+    <div class="container__body">
       <el-form
         :model="form"
         :rules="rules"
@@ -32,23 +27,21 @@
         </el-form-item>
 
       </el-form>
+    </div>
 
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button
-            type="primary"
-            @click="submit"
-            icon="el-icon-user-solid"
-            :loading="loading"
-            :disabled="loading"
-          >Create</el-button>
-          <el-button
-            @click="cancel"
-            type="text"
-          >Cancel</el-button>
-        </span>
-      </template>
-    </el-dialog>
+    <span class="container__footer container__footer--right">
+      <el-button
+        type="primary"
+        @click="submit"
+        icon="el-icon-user-solid"
+        :loading="loading"
+        :disabled="loading"
+      >Create</el-button>
+      <el-button
+        @click="cancel"
+        type="text"
+      >Cancel</el-button>
+    </span>
   </div>
 </template>
 
@@ -59,6 +52,7 @@ import {
 import { RegistrationRequest } from '@doer/entities';
 import { useRouter } from 'vue-router';
 import { State, Store } from '@/models/Store/StoreInterface';
+import { MessageStoreInterface } from '@/models/Store/MessageStoreInterface';
 import AuthService from '@/services/AuthService';
 import defaultStore from '@/store/store';
 
@@ -85,7 +79,7 @@ export default defineComponent({
       if (value === '') {
         callback(new Error('Please input the password again'));
       } else if (value !== form.pass) {
-        callback(new Error('Two inputs don\'t match!'));
+        callback(new Error('Two passwords don\'t match!'));
       } else {
         callback();
       }
@@ -109,7 +103,15 @@ export default defineComponent({
     const signUp = () => {
       loading.value = true;
       authService.signUp(form)
-        .then(console.log)
+        .then(() => {
+          message.success({
+            title: 'Account successfully created',
+            dangerouslyUseHTMLString: true,
+            duration: 10000,
+            message: `Please check your mailbox <span style="color: #409EFF">${form.email}</span> to confirm your account.`,
+            onClose: () => router.push('/'),
+          });
+        })
         .catch(message.error)
         .finally(() => {
           loading.value = false;

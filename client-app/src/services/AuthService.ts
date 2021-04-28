@@ -13,11 +13,29 @@ export default class AuthService extends BaseService {
       .then(({ token }: AuthResponse) => {
         localStorage.sessionToken = token;
         localStorage.sessionDate = new Date().toISOString();
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 100);
       });
   }
 
   signUp(params: Partial<RegistrationRequest>): Promise<void> {
     return this.publicPost(Routes.SignUp, { params });
+  }
+
+  confirmEmail(hash: string): Promise<void> {
+    return this.publicGet(`${'/confirm-email'}/${hash}`);
+  }
+
+  resendConfirmationLink(params: any) {
+    return this.publicPost('/resend-email-confirmation', { params });
+  }
+
+  restorePassword(params: any) {
+    return this.publicPost('/restore-password', { params });
+  }
+
+  resetPassword(params: any) {
+    return this.publicPost('/reset-password', { params });
   }
 }

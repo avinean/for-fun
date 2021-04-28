@@ -18,9 +18,31 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
   {
-    path: PageRoutes.Registration,
-    name: 'Registration',
-    component: () => import(/* webpackChunkName: "signup" */ '../views/Auth/SignUp.vue'),
+    path: PageRoutes.Auth,
+    name: 'Auth',
+    component: () => import(/* webpackChunkName: "auth" */ '../views/Auth/Auth.vue'),
+    children: [
+      {
+        path: PageRoutes.Registration,
+        name: 'AuthRegistration',
+        component: () => import(/* webpackChunkName: "signup" */ '../views/Auth/SignUp.vue'),
+      },
+      {
+        path: `${PageRoutes.ConfirmEmail}/:hash`,
+        name: 'AuthConfirmEmail',
+        component: () => import(/* webpackChunkName: "confirm-email" */ '../views/Auth/ConfirmEmail.vue'),
+      },
+      {
+        path: `${PageRoutes.RestorePassword}`,
+        name: 'AuthRestorePassword',
+        component: () => import(/* webpackChunkName: "restore-password" */ '../views/Auth/RestorePassord.vue'),
+      },
+      {
+        path: `${PageRoutes.ResetPassword}/:hash`,
+        name: 'AuthResetPassword',
+        component: () => import(/* webpackChunkName: "reset-password" */ '../views/Auth/ResetPassword.vue'),
+      },
+    ],
   },
   {
     path: PageRoutes.Account,
@@ -80,6 +102,12 @@ const routes: Array<RouteRecordRaw> = [
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  console.log(to);
+  console.log(from);
+  next();
 });
 
 export default router;

@@ -19,11 +19,14 @@
 
         <el-form-item label="Password" prop="pass">
           <el-input placeholder="abcd1234%!" v-model="form.pass" show-password></el-input>
+          <el-button class="login_forgot" @click="forgotPassword" type="text">
+            forgot password?
+          </el-button>
         </el-form-item>
 
       </el-form>
       <template #footer>
-        <span class="dialog-footer">
+        <span>
           <el-button
             type="primary"
             @click="submit"
@@ -52,6 +55,7 @@ import { AuthRequest } from '@doer/entities';
 import AuthService from '@/services/AuthService';
 import { UserStoreInterface } from '@/models/Store/UserStoreInterface';
 import userStore from '@/store/userStore';
+import { PageRoutes } from '@/models/common';
 
 const authService = new AuthService();
 
@@ -105,7 +109,12 @@ export default defineComponent({
 
     const registration = () => {
       store.confirmAuthorization();
-      router.push('/registration');
+      router.push(`${PageRoutes.Auth}/${PageRoutes.Registration}`);
+    };
+
+    const forgotPassword = () => {
+      store.confirmAuthorization();
+      router.push(`${PageRoutes.Auth}/${PageRoutes.RestorePassword}`);
     };
 
     return {
@@ -115,6 +124,7 @@ export default defineComponent({
       form,
       rules,
 
+      forgotPassword,
       submit,
       cancel,
       registration,
@@ -122,3 +132,11 @@ export default defineComponent({
   },
 });
 </script>
+
+<style lang="scss">
+.login_forgot {
+  position: absolute;
+  right: 0;
+  bottom: -50%;
+}
+</style>
