@@ -87,26 +87,26 @@ export const checkWinner = (field: TikTacToeCell[][], cellsCount = 3):
     */
 
     if (right) {
-      for (;localX < cellsCount;) {
+      for (;localX < x + cellsCount;) {
         if (field[localY][localX].sign !== sign) return;
         localWinningCombo.push([localY, localX]);
         localX++;
       }
     } else if (bottomRight) {
-      for (;localX < cellsCount;) {
+      for (;localX < x + cellsCount;) {
         if (field[localY][localX].sign !== sign) return;
         localWinningCombo.push([localY, localX]);
         localX++;
         localY++;
       }
     } else if (bottom) {
-      for (;localY < cellsCount;) {
+      for (;localY < y + cellsCount;) {
         if (field[localY][localX].sign !== sign) return;
         localWinningCombo.push([localY, localX]);
         localY++;
       }
     } else if (bottomLeft) {
-      for (;localY < cellsCount;) {
+      for (;localY < y + cellsCount;) {
         if (field[localY][localX].sign !== sign) return;
         localWinningCombo.push([localY, localX]);
         localX--;
@@ -114,7 +114,9 @@ export const checkWinner = (field: TikTacToeCell[][], cellsCount = 3):
       }
     }
 
-    winningCombo = localWinningCombo;
+    if (localWinningCombo.length === cellsCount) {
+      winningCombo = localWinningCombo;
+    }
   };
 
   for (y = 0; y < field.length; y++) {
@@ -137,7 +139,6 @@ export const checkWinner = (field: TikTacToeCell[][], cellsCount = 3):
     }
   }
 
-  console.log(winningCombo);
-  if (winningCombo) return winningCombo;
+  if (winningCombo.length) return winningCombo;
   return [];
 };
