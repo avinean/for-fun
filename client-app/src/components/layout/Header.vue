@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { defineComponent, inject } from 'vue';
-import { PageRoutes } from '@/models/common';
+import { PageRoutes } from '@doer/entities';
 import { useRouter } from 'vue-router';
 import logo from '@/assets/logo.png';
 import { UserStoreInterface } from '@/models/Store/UserStoreInterface';
@@ -48,7 +48,7 @@ import userStore from '@/store/userStore';
 
 export default defineComponent({
   setup() {
-    const store: UserStoreInterface = inject<UserStoreInterface>('user', userStore);
+    const store: UserStoreInterface = inject<UserStoreInterface>('userStore', userStore);
     const router = useRouter();
     const routes = PageRoutes;
 

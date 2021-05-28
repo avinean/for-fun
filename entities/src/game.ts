@@ -19,3 +19,13 @@ export interface GameMessage<T> {
   data: T;
   to: User;
 }
+
+export interface GameHistory<T> {
+  id?: number;
+  invitor: number;
+  acceptor: number;
+  gameId: number;
+  winnerId: number | null;
+  createdAt?: string;
+  state: T;
+}

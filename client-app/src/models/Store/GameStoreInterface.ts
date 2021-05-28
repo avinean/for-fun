@@ -1,11 +1,11 @@
 import SocketService from '@/services/SocketService';
-import { Game, GameRequest, User } from '@doer/entities';
+import { Game, GameHistory, GameRequest, User } from '@doer/entities';
 import { ComputedRef } from 'vue';
 
 export interface GameStateInterface {
   games: Game[];
   gamesLoading: boolean;
-  currentGame: ComputedRef<Game | undefined>;
+  currentGame?: Game;
 
   inviter: User | null;
   acceptor: User | null;
@@ -21,12 +21,13 @@ export interface GameStateInterface {
 
 export interface GameStoreInterface {
   state: GameStateInterface;
-  socket: SocketService;
+  socket: typeof SocketService;
 
   setUsers: (request: GameRequest) => void;
-  loadGames: ()=> void;
+  loadGames: () => void;
   sendInvitation: (user: User, game: Game) => void;
   finishGame: () => void;
   startGame: () => void;
   clearState: () => void;
+  setWinner: <T>(history: GameHistory<T>) => void;
 }

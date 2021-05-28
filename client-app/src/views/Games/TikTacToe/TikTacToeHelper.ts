@@ -65,7 +65,6 @@ enum Direction {
 
 export const checkWinner = (field: TikTacToeCell[][], cellsCount = 3):
   [number, number][] => {
-  console.log(cellsCount);
   let sign: Signs;
   let x: number;
   let y: number;

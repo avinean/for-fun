@@ -19,14 +19,13 @@
 <script lang="ts">
 import { defineComponent, inject, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { Game } from '@doer/entities';
+import { Game, PageRoutes } from '@doer/entities';
 import defaultImage from '@/assets/puzzle.png';
 import { GameStoreInterface } from '@/models/Store/GameStoreInterface';
-import { PageRoutes } from '@/models/common';
 
 export default defineComponent({
   setup() {
-    const gameStore = inject<GameStoreInterface>('game');
+    const gameStore = inject<GameStoreInterface>('gameStore');
     const router = useRouter();
 
     const openGame = (game: Game): void => {

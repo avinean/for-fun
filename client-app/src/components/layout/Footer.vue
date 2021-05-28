@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { PageRoutes } from '@/models/common';
+import { PageRoutes } from '@doer/entities';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import logo from '@/assets/logo.png';

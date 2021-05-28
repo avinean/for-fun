@@ -162,8 +162,8 @@
         "affectsGlobalScope": true
       },
       "./src/routes.ts": {
-        "version": "e2d8392bd7d2e69adba9519aba1301b966afe964a91ad14eb9df0edca11b2e25",
-        "signature": "7f0a87c03ff24da3923218d198be699d22852a09dc3c1fcee7da947df506dbec",
+        "version": "c83e23b5584383bb2fe402025079e12c061abe6e0f7bcdff27e808a3591064b0",
+        "signature": "50a051cf3ad858f9a418e0e6f0e638bc21a67c55c09835137cbf1d3015c0acba",
         "affectsGlobalScope": false
       },
       "./src/auth.ts": {
@@ -182,8 +182,8 @@
         "affectsGlobalScope": false
       },
       "./src/game.ts": {
-        "version": "5e3a480388e02d69310063f971cc3d936fe421ebb38bfee933b96d1d960d48c4",
-        "signature": "a4af401bbcbfa35422f4c1e2f225aa57a62d2ea959a0215d54296f42ec4b100f",
+        "version": "dde288bad0dd3ad464e80bef813a113c616bbab4fa96c2c9de1dcdffbc292e14",
+        "signature": "45f318b591e8de3fc6751334e1d06d317c696e6a13e38d58d972ff0e81b31a1b",
         "affectsGlobalScope": false
       },
       "./src/message.ts": {

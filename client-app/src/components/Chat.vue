@@ -76,7 +76,7 @@ export default defineComponent({
     const draft = ref<string>('');
     const isCollapsed = ref<boolean>(true);
     const messages = reactive<MessageObject[]>([]);
-    const gameStore = inject<GameStoreInterface>('game');
+    const gameStore = inject<GameStoreInterface>('gameStore');
 
     const scrollToBottom = () => {
       nextTick(() => {

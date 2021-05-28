@@ -6,7 +6,7 @@
     </el-menu-item>
     <el-menu-item disabled>
       <i class="el-icon-s-data"></i>
-      <template #title>Statistics | Under development</template>
+      <template #title>Statistics</template>
     </el-menu-item>
     <el-menu-item disabled>
       <i class="el-icon-user"></i>

@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import randomstring from 'randomstring';
+import { PageRoutes } from '@doer/entities';
 import db from '../DataBase/DataBase';
 
 const transporter = nodemailer.createTransport({
@@ -24,7 +25,7 @@ class MailService {
         subject: 'Please confirm your email',
         html: `<div>
           <h1>You've just registered on <a href="https://doer.com">doer.com</a>. Please follow the link to </h1>
-          <a href="${process.env.BASE_URL}/auth/confirm-email/${id}" target="_blank">confirm your email</a>
+          <a href="${process.env.BASE_URL}${PageRoutes.Auth}${PageRoutes.RestorePassword}/${id}" target="_blank">confirm your email</a>
         </div>`,
       };
       
@@ -45,7 +46,7 @@ class MailService {
         subject: 'Restore password',
         html: `<div>
           <h1>You've just requested password restoring for <a href="https://doer.com">doer.com</a>. Please follow the link to </h1>
-          <a href="${process.env.BASE_URL}/auth/reset-password/${id}" target="_blank">set new password</a>
+          <a href="${process.env.BASE_URL}${PageRoutes.Auth}${PageRoutes.ResetPassword}/${id}" target="_blank">set new password</a>
         </div>`,
       };
       

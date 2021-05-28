@@ -88,8 +88,8 @@ interface Data {
 
 export default defineComponent({
   setup() {
-    const gameStore = inject<GameStoreInterface>('game');
-    const userStore = inject<UserStoreInterface>('user');
+    const gameStore = inject<GameStoreInterface>('gameStore');
+    const userStore = inject<UserStoreInterface>('userStore');
     const isCollapsed = ref<boolean>(false);
     const games = computed(() => gameStore?.state.games || []);
     const pendingUsers = computed(() => gameStore?.state.pendingUsers || []);

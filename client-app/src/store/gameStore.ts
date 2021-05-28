@@ -1,9 +1,12 @@
-import { computed, reactive, readonly } from 'vue';
+import {
+  computed, reactive, readonly, watch,
+} from 'vue';
 import { GameStateInterface, GameStoreInterface } from '@/models/Store/GameStoreInterface';
-import { Game, GameRequest, User } from '@doer/entities';
+import {
+  Game, GameRequest, User, PageRoutes, GameHistory,
+} from '@doer/entities';
 import router from '@/router';
 import socket from '@/services/SocketService';
-import { PageRoutes } from '@/models/common';
 import GameService from '@/services/GameService';
 import { INotificationHandle } from 'element-plus/lib/el-notification/src/notification.type';
 import store from './store';
@@ -19,11 +22,11 @@ socket.init();
  * inviter: sendInvitation
  * acceptor: listens to 'invite to game' and opens confirmation window
  *      acceptor: clicks 'cancel' -> confirmation window hides.
- *                @TODO send cancelation to inviter to stop pending
- *      acceptor: clicks 'accept' -> onGameAcception runs and inviter
+ *                @TODO send cancellation to inviter to stop pending
+ *      acceptor: clicks 'accept' -> onGameAcceptation runs and inviter
  *                notifies with 'accept invitation to game'
- * inviter: listens to 'accept invitation to game' and runs onGameAcception
- *          @TODO send cancelations to other acceptors from pending list
+ * inviter: listens to 'accept invitation to game' and runs onGameAcceptation
+ *          @TODO send cancellations to other acceptors from pending list
  *
 */
 
@@ -38,13 +41,7 @@ const invitationWindows: InvitationWindow[] = [];
 const state: any = reactive<GameStateInterface>({
   games: [],
   gamesLoading: false,
-  currentGame: computed(() => {
-    const route = router.currentRoute.value;
-    const match = route.path.match(/\/games\/(?<gameId>.+)/) as any;
-    if (!match) return;
-    const { groups: { gameId } } = match;
-    return state.games.find((game: Game) => game.strId === gameId);
-  }),
+  currentGame: setCurrentGame(),
 
   inviter: null,
   acceptor: null,
@@ -57,6 +54,17 @@ const state: any = reactive<GameStateInterface>({
   acceptGame: () => {},
   cancelGame: () => {},
 });
+
+watch(() => router.currentRoute.value, setCurrentGame);
+watch(() => state.games, setCurrentGame);
+
+function setCurrentGame(): Game | undefined {
+  const route = router.currentRoute.value;
+  const match = route.path.match(/\/games\/(?<gameId>.+)/) as any;
+  if (!match) return;
+  const { groups: { gameId } } = match;
+  state.currentGame = state.games.find((game: Game) => game.strId === gameId);
+}
 
 const clearState = () => {
   state.inviter = null;
@@ -119,12 +127,11 @@ const onGameAcception = (inviter: User, acceptor: User, game: Game) => {
 };
 
 const closeInvitations = (inviter: User, acceptor: User, game: Game) => {
-  console.log(state.pendingUsers);
   socket.emit('close invitation to game', {
     ids: state.pendingUsers,
     invitation: { inviter, acceptor, game },
   });
-  console.log(state.pendingUsers);
+
   state.pendingUsers = [];
 };
 
@@ -196,6 +203,10 @@ const setUsers = ({ inviter, acceptor, game }: GameRequest) => {
   });
 };
 
+const setWinner = <T>(history: GameHistory<T>) => {
+  new GameService().setGameStatistic<T>(history);
+};
+
 export default {
   state: readonly(state),
   socket,
@@ -206,6 +217,7 @@ export default {
   finishGame,
   startGame,
   clearState,
+  setWinner,
 } as GameStoreInterface;
 
 socket.on('accept invitation to game', ({ inviter, acceptor, game }) => {

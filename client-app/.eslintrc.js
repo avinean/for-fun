@@ -25,7 +25,8 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'no-continue': 'off',
     'consistent-return': 'off',
-    'no-plusplus': 'off'
+    'no-plusplus': 'off',
+    '@typescript-eslint/no-use-before-define': 'off'
   },
   overrides: [
     {

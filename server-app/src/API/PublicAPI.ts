@@ -1,5 +1,5 @@
 
-import { Routes, User } from '@doer/entities';
+import { Routes, PageRoutes, User } from '@doer/entities';
 import authService from '../Services/AuthService';
 import secret from '../Services/AuthService';
 import mailService from '../Services/MailService';
@@ -38,7 +38,7 @@ export default class PublicAPI extends BaseAPI {
         });
     });
 
-    this.router.get('/confirm-email/:hash', async (req, res) => {
+    this.router.get(`${Routes.ConfirmEmail}/:hash`, async (req, res) => {
 
       this.db.one(`
         UPDATE users 
@@ -68,7 +68,7 @@ export default class PublicAPI extends BaseAPI {
         });
     });
 
-    this.router.post('/resend-email-confirmation', async (req, res) => {
+    this.router.post(Routes.ConfirmEmail, async (req, res) => {
       const { email } = req.body;
 
       try {
@@ -79,7 +79,7 @@ export default class PublicAPI extends BaseAPI {
         `, [email])
         if (user.confirmed) {
           return res.status(400).send({
-            error: 'User has already been confirmed. Try to <a href="/auth/restore-password">restore password</a>',
+            error: `User has already been confirmed. Try to <a href="${PageRoutes.Auth}${PageRoutes.RestorePassword}">restore password</a>`,
           });
         }
       } catch(e) {
@@ -113,7 +113,7 @@ export default class PublicAPI extends BaseAPI {
 
     });
 
-    this.router.post('/restore-password', async (req, res) => {
+    this.router.post(Routes.RestorePassword, async (req, res) => {
       const { email } = req.body;
 
       try {
@@ -153,7 +153,7 @@ export default class PublicAPI extends BaseAPI {
 
     });
 
-    this.router.post('/reset-password', async (req, res) => {
+    this.router.post(Routes.ResetPassword, async (req, res) => {
       const { pass, hash } = req.body;
       let id, email;
 

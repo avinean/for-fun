@@ -42,7 +42,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { State, Store } from '@/models/Store/StoreInterface';
 import AuthService from '@/services/AuthService';
 import defaultStore from '@/store/store';
-import { PageRoutes } from '@/models/common';
+import { PageRoutes } from '@doer/entities';
 
 const authService = new AuthService();
 

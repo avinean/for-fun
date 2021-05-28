@@ -51,18 +51,17 @@ import {
   defineComponent, inject, reactive, Ref, ref,
 } from 'vue';
 import { useRouter } from 'vue-router';
-import { AuthRequest } from '@doer/entities';
+import { AuthRequest, PageRoutes } from '@doer/entities';
 import AuthService from '@/services/AuthService';
 import { UserStoreInterface } from '@/models/Store/UserStoreInterface';
 import userStore from '@/store/userStore';
-import { PageRoutes } from '@/models/common';
 
 const authService = new AuthService();
 
 export default defineComponent({
   setup() {
     const message = inject<any>('message');
-    const store: UserStoreInterface = inject<UserStoreInterface>('user', userStore);
+    const store: UserStoreInterface = inject<UserStoreInterface>('userStore', userStore);
     const formRef: Ref<any> = ref(null);
     const router = useRouter();
 
@@ -109,12 +108,12 @@ export default defineComponent({
 
     const registration = () => {
       store.confirmAuthorization();
-      router.push(`${PageRoutes.Auth}/${PageRoutes.Registration}`);
+      router.push(`${PageRoutes.Auth}${PageRoutes.Registration}`);
     };
 
     const forgotPassword = () => {
       store.confirmAuthorization();
-      router.push(`${PageRoutes.Auth}/${PageRoutes.RestorePassword}`);
+      router.push(`${PageRoutes.Auth}${PageRoutes.RestorePassword}`);
     };
 
     return {

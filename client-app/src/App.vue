@@ -32,8 +32,7 @@ import CChat from '@/components/Chat.vue';
 import COnlineUsers from '@/components/OnlineUsers.vue';
 import { useRoute } from 'vue-router';
 import socket from '@/services/SocketService';
-import { User } from '@doer/entities';
-import { PageRoutes } from './models/common';
+import { User, PageRoutes } from '@doer/entities';
 
 export default defineComponent({
   name: 'App',
@@ -47,8 +46,8 @@ export default defineComponent({
   },
   setup() {
     provide('message', store.messageStore);
-    provide('user', store.userStore);
-    provide('game', store.gameStore);
+    provide('userStore', store.userStore);
+    provide('gameStore', store.gameStore);
     provide('store', store);
     provide('state', store.state);
 
