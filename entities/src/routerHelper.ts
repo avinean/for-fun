@@ -12,7 +12,7 @@ class RouterHelper {
   private names = [];
 
   private paths = [];
-  
+
   // FE
   home() {return this.add({ name: 'Home', path: '' });}
   auth() {return this.add({ name: 'Auth', path: 'auth' });}
@@ -21,7 +21,7 @@ class RouterHelper {
   about() {return this.add({ name: 'About', path: 'about' });}
   games() {return this.add({ name: 'Games', path: 'games' });}
   statistics() {return this.add({ name: 'Statistics', path: 'statistics' });}
-  
+
 
   // BE
   api() {return this.add({ name: 'Api', path: 'api' });}

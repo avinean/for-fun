@@ -11,7 +11,7 @@
   "dependencies": {
     "@doer/entities": "file:../entities",
     "core-js": "^3.6.5",
-    "element-plus": "^1.0.2-beta.33",
+    "element-plus": "^1.0.2-beta.45",
     "register-service-worker": "^1.7.1",
     "socket.io-client": "^4.0.0",
     "vue": "^3.0.0",

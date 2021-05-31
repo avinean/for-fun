@@ -187,7 +187,7 @@
         "affectsGlobalScope": false
       },
       "./src/routerhelper.ts": {
-        "version": "960bf1753ac871b4fec1c7072b8fe35272a53b9b1fd68d231bf4c4389c165768",
+        "version": "e36e40c5ade30ea09c2fd91ab7a9e7d13e5ae01ce21a82987d3db9bf947e2c7e",
         "signature": "2d83a39b6e41d25d569026dcf83f9900a650dd72b8aea532da937e57d981c905",
         "affectsGlobalScope": false
       },

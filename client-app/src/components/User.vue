@@ -54,7 +54,8 @@ export default defineComponent({
   justify-content: space-between;
 
   .el-avatar {
-    min-width: 40px;
+    min-width: 54px;
+    height: 54px;
     margin-right: 4px;
     margin-left: 4px;
   }
