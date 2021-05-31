@@ -1,7 +1,7 @@
 <template>
   <footer class="footer">
     <div class="footer__logo">
-      <router-link :to="routes.Home">
+      <router-link :to="routerHelper.home().path()">
         <img :src="logo" class="" alt="Doer Logo">
       </router-link>
       <div class="footer__year">
@@ -15,13 +15,13 @@
       </div>
     </div>
     <div class="footer__navigation">
-      <router-link :to="routes.Home" class="footer__link">
+      <router-link :to="routerHelper.home().path()" class="footer__link">
         Home
       </router-link>
-      <router-link :to="routes.About" class="footer__link">
+      <router-link :to="routerHelper.about().path()" class="footer__link">
         About us
       </router-link>
-      <router-link :to="routes.Account" class="footer__link">
+      <router-link :to="routerHelper.account().path()" class="footer__link">
         Account
       </router-link>
     </div>
@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { PageRoutes } from '@doer/entities';
+import { routerHelper } from '@doer/entities';
 import { defineComponent } from 'vue';
 import { useRouter } from 'vue-router';
 import logo from '@/assets/logo.png';
@@ -37,16 +37,15 @@ import logo from '@/assets/logo.png';
 export default defineComponent({
   setup() {
     const router = useRouter();
-    const routes = PageRoutes;
     const startedYear = 2021;
     const currentYear = new Date().getFullYear();
 
     const goToAccount = (): void => {
-      router.push(PageRoutes.Account);
+      router.push(routerHelper.account().path());
     };
 
     return {
-      routes,
+      routerHelper,
       logo,
       startedYear,
       currentYear,

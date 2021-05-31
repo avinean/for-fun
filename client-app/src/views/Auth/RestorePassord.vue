@@ -38,11 +38,9 @@ import {
   computed,
   defineComponent, inject, onMounted, reactive, Ref, ref,
 } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { State, Store } from '@/models/Store/StoreInterface';
+import { Store } from '@/models/Store/StoreInterface';
 import AuthService from '@/services/AuthService';
 import defaultStore from '@/store/store';
-import { PageRoutes } from '@doer/entities';
 
 const authService = new AuthService();
 

@@ -3,7 +3,7 @@ import {
 } from 'vue';
 import { GameStateInterface, GameStoreInterface } from '@/models/Store/GameStoreInterface';
 import {
-  Game, GameRequest, User, PageRoutes, GameHistory,
+  Game, GameRequest, User, routerHelper, GameHistory,
 } from '@doer/entities';
 import router from '@/router';
 import socket from '@/services/SocketService';
@@ -123,7 +123,7 @@ const onGameAcception = (inviter: User, acceptor: User, game: Game) => {
   state.game = game;
   state.isGameFinished = false;
   state.gameTemporaryID = Math.random();
-  router.push(`${PageRoutes.Games}/${game.strId}`);
+  router.push(routerHelper.games().dynamicPath(game.strId).path());
 };
 
 const closeInvitations = (inviter: User, acceptor: User, game: Game) => {

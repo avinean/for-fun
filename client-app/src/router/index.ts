@@ -1,4 +1,4 @@
-import { PageRoutes, Game } from '@doer/entities';
+import { routerHelper, Params } from '@doer/entities';
 import gameStore from '@/store/gameStore';
 import userStore from '@/store/userStore';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
@@ -7,38 +7,31 @@ import TikTacToe from '../views/Games/TikTacToe/TikTacToe.vue';
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: PageRoutes.Home,
-    name: 'Home',
+    ...routerHelper.home().get(),
     component: Home,
   },
   {
-    path: PageRoutes.About,
-    name: 'About',
+    ...routerHelper.about().get(),
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
   {
-    path: `${PageRoutes.Auth}${PageRoutes.Registration}`,
-    name: 'AuthRegistration',
+    ...routerHelper.auth().registration().get(),
     component: () => import(/* webpackChunkName: "signup" */ '../views/Auth/SignUp.vue'),
   },
   {
-    path: `${PageRoutes.Auth}${PageRoutes.ConfirmEmail}/:hash`,
-    name: 'AuthConfirmEmail',
+    ...routerHelper.auth().registration().param(Params.Hash).get(),
     component: () => import(/* webpackChunkName: "confirm-email" */ '../views/Auth/ConfirmEmail.vue'),
   },
   {
-    path: `${PageRoutes.Auth}${PageRoutes.RestorePassword}`,
-    name: 'AuthRestorePassword',
+    ...routerHelper.auth().restorePassword().get(),
     component: () => import(/* webpackChunkName: "restore-password" */ '../views/Auth/RestorePassord.vue'),
   },
   {
-    path: `${PageRoutes.Auth}${PageRoutes.ResetPassword}/:hash`,
-    name: 'AuthResetPassword',
+    ...routerHelper.auth().resetPassword().param(Params.Hash).get(),
     component: () => import(/* webpackChunkName: "reset-password" */ '../views/Auth/ResetPassword.vue'),
   },
   {
-    path: PageRoutes.Account,
-    name: 'Account',
+    ...routerHelper.account().get(),
     component: () => import(/* webpackChunkName: "account" */ '../views/Account/Account.vue'),
     beforeEnter: (to, from, next) => {
       userStore.requireAuthorization()
@@ -46,35 +39,30 @@ const routes: Array<RouteRecordRaw> = [
           next();
         })
         .catch(() => {
-          next(PageRoutes.Home);
+          next(routerHelper.home().path());
         });
     },
     children: [
       {
-        path: '',
-        name: 'AboutSettings',
+        ...routerHelper.account().get(),
         component: () => import(/* webpackChunkName: "account-settings" */ '../views/Account/AccountSettings.vue'),
       },
       {
-        path: 'statistics',
-        name: 'AboutSettings',
-        component: () => import(/* webpackChunkName: "account-settings" */ '../views/Account/AccountStatistics.vue'),
+        ...routerHelper.account().statistics().get(),
+        component: () => import(/* webpackChunkName: "account-statistics" */ '../views/Account/AccountStatistics.vue'),
       },
     ],
   },
   {
-    path: PageRoutes.Games,
-    name: 'Games',
+    ...routerHelper.games().get(),
     component: () => import(/* webpackChunkName: "games" */ '../views/Games/Games.vue'),
     children: [
       {
-        path: '',
-        name: 'GamesList',
+        ...routerHelper.games().home().get(),
         component: () => import(/* webpackChunkName: "gameslist" */ '../views/Games/GamesList.vue'),
       },
       {
-        path: 'tiktactoe3x3',
-        name: 'TikTacToe3x3',
+        ...routerHelper.games().dynamicPath('tiktactoe3x3').get(),
         props: {
           cellsCount: 3,
           winCombo: 3,
@@ -83,8 +71,7 @@ const routes: Array<RouteRecordRaw> = [
         component: TikTacToe,
       },
       {
-        path: 'tiktactoe19x19',
-        name: 'TikTacToe19x19',
+        ...routerHelper.games().dynamicPath('tiktactoe19x19').get(),
         props: {
           cellsCount: 19,
           winCombo: 5,

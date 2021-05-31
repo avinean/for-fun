@@ -1,5 +1,5 @@
 
-import { Routes, PageRoutes, User } from '@doer/entities';
+import { routerHelper, User, Params } from '@doer/entities';
 import authService from '../Services/AuthService';
 import secret from '../Services/AuthService';
 import mailService from '../Services/MailService';
@@ -7,7 +7,7 @@ import BaseAPI from './BaseAPI';
 
 export default class PublicAPI extends BaseAPI {
   initRoutes() {    
-    this.router.post(Routes.SignIn, async (req, res) => {
+    this.router.post(routerHelper.signIn().path(), async (req, res) => {
       secret.check(req.body)
       .then(token => {
         res.status(200).send({ token });
@@ -17,7 +17,7 @@ export default class PublicAPI extends BaseAPI {
       });
     });
 
-    this.router.post(Routes.SignUp, async (req, res) => {
+    this.router.post(routerHelper.signUp().path(), async (req, res) => {
       const hash = secret.hash(req.body);
       const { email, nickname } = req.body;
       
@@ -38,7 +38,7 @@ export default class PublicAPI extends BaseAPI {
         });
     });
 
-    this.router.get(`${Routes.ConfirmEmail}/:hash`, async (req, res) => {
+    this.router.get(routerHelper.confirmEmail().dynamicPath(Params.Hash).path(), async (req, res) => {
 
       this.db.one(`
         UPDATE users 
@@ -68,7 +68,7 @@ export default class PublicAPI extends BaseAPI {
         });
     });
 
-    this.router.post(Routes.ConfirmEmail, async (req, res) => {
+    this.router.post(routerHelper.confirmEmail().path(), async (req, res) => {
       const { email } = req.body;
 
       try {
@@ -79,7 +79,7 @@ export default class PublicAPI extends BaseAPI {
         `, [email])
         if (user.confirmed) {
           return res.status(400).send({
-            error: `User has already been confirmed. Try to <a href="${PageRoutes.Auth}${PageRoutes.RestorePassword}">restore password</a>`,
+            error: `User has already been confirmed. Try to <a href="${routerHelper.auth().restorePassword().path()}">restore password</a>`,
           });
         }
       } catch(e) {
@@ -113,7 +113,7 @@ export default class PublicAPI extends BaseAPI {
 
     });
 
-    this.router.post(Routes.RestorePassword, async (req, res) => {
+    this.router.post(routerHelper.restorePassword().path(), async (req, res) => {
       const { email } = req.body;
 
       try {
@@ -153,7 +153,7 @@ export default class PublicAPI extends BaseAPI {
 
     });
 
-    this.router.post(Routes.ResetPassword, async (req, res) => {
+    this.router.post(routerHelper.resetPassword().path(), async (req, res) => {
       const { pass, hash } = req.body;
       let id, email;
 

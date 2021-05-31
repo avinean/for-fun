@@ -161,11 +161,6 @@
         "signature": "506b80b9951c9381dc5f11897b31fca5e2a65731d96ddefa19687fbc26b23c6e",
         "affectsGlobalScope": true
       },
-      "./src/routes.ts": {
-        "version": "c83e23b5584383bb2fe402025079e12c061abe6e0f7bcdff27e808a3591064b0",
-        "signature": "50a051cf3ad858f9a418e0e6f0e638bc21a67c55c09835137cbf1d3015c0acba",
-        "affectsGlobalScope": false
-      },
       "./src/auth.ts": {
         "version": "dc85319ef49fdc95ce117a4a2c518bb8efea0e9b362b4be4d20a8ebde9ef2abd",
         "signature": "060457943003196ea02c44c2cbb2449fc85b152304be7c2b660b447d70e86d20",
@@ -182,8 +177,8 @@
         "affectsGlobalScope": false
       },
       "./src/game.ts": {
-        "version": "dde288bad0dd3ad464e80bef813a113c616bbab4fa96c2c9de1dcdffbc292e14",
-        "signature": "45f318b591e8de3fc6751334e1d06d317c696e6a13e38d58d972ff0e81b31a1b",
+        "version": "fa370f7cad65f03593ab3dc0f51358741afb168f041a914523f18431d6799edc",
+        "signature": "e871c22226513b2e575cf52b3314c25b430e874b3f7063e6ee403241183fc861",
         "affectsGlobalScope": false
       },
       "./src/message.ts": {
@@ -191,9 +186,14 @@
         "signature": "d7c306fe9533af80afc8ce086f9a6b5f500fc9f08ddc1e09e2edb332d9555323",
         "affectsGlobalScope": false
       },
+      "./src/routerhelper.ts": {
+        "version": "960bf1753ac871b4fec1c7072b8fe35272a53b9b1fd68d231bf4c4389c165768",
+        "signature": "2d83a39b6e41d25d569026dcf83f9900a650dd72b8aea532da937e57d981c905",
+        "affectsGlobalScope": false
+      },
       "./src/index.ts": {
-        "version": "2d8249d75d00cdc3ee6a1ecbcace1b070cb515b09a671235678e07f4c064f8fc",
-        "signature": "d101da27838282e53dfe81c08de05c91a22f31a02e2ab0790bf2bf18d5077523",
+        "version": "aaf1dc319d8abb70033438d4544754c7489bc5fd8a4de452b00cbec2b2895c62",
+        "signature": "69b5cbbf0082a7d3b2c9fa828de4dca1c98d70847102a77c620c02a3f6f53d97",
         "affectsGlobalScope": false
       },
       "./node_modules/@types/node/globals.d.ts": {
@@ -652,7 +652,7 @@
         "./src/chat.ts",
         "./src/game.ts",
         "./src/message.ts",
-        "./src/routes.ts",
+        "./src/routerhelper.ts",
         "./src/user.ts"
       ],
       "./src/message.ts": [
@@ -878,7 +878,7 @@
         "./src/chat.ts",
         "./src/game.ts",
         "./src/message.ts",
-        "./src/routes.ts",
+        "./src/routerhelper.ts",
         "./src/user.ts"
       ],
       "./src/message.ts": [
@@ -968,7 +968,7 @@
       "./src/game.ts",
       "./src/index.ts",
       "./src/message.ts",
-      "./src/routes.ts",
+      "./src/routerhelper.ts",
       "./src/user.ts"
     ]
   },

@@ -1,16 +1,16 @@
 <template>
   <div class="header__wrap">
     <header class="header">
-      <router-link :to="routes.Home">
+      <router-link :to="routerHelper.home().path()">
         <img :src="logo" class="header__logo" alt="Doer Logo">
       </router-link>
-      <router-link :to="routes.Home" class="header__link">
+      <router-link :to="routerHelper.home().path()" class="header__link">
         Home
       </router-link>
-      <router-link :to="routes.Games" class="header__link">
+      <router-link :to="routerHelper.games().path()" class="header__link">
         Games
       </router-link>
-      <router-link :to="routes.About" class="header__link">
+      <router-link :to="routerHelper.about().path()" class="header__link">
         About us
       </router-link>
       <div class="spacer"></div>
@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { defineComponent, inject } from 'vue';
-import { PageRoutes } from '@doer/entities';
+import { routerHelper } from '@doer/entities';
 import { useRouter } from 'vue-router';
 import logo from '@/assets/logo.png';
 import { UserStoreInterface } from '@/models/Store/UserStoreInterface';
@@ -50,20 +50,19 @@ export default defineComponent({
   setup() {
     const store: UserStoreInterface = inject<UserStoreInterface>('userStore', userStore);
     const router = useRouter();
-    const routes = PageRoutes;
 
     const goToAccount = (): void => {
-      router.push(routes.Account);
+      router.push(routerHelper.account().path());
     };
 
     const logOut = (): void => {
       store.logOut();
-      router.push(routes.Home);
+      router.push(routerHelper.home().path());
     };
 
     return {
       state: store.state,
-      routes,
+      routerHelper,
       logo,
 
       goToAccount,

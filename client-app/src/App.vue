@@ -32,7 +32,7 @@ import CChat from '@/components/Chat.vue';
 import COnlineUsers from '@/components/OnlineUsers.vue';
 import { useRoute } from 'vue-router';
 import socket from '@/services/SocketService';
-import { User, PageRoutes } from '@doer/entities';
+import { User, routerHelper } from '@doer/entities';
 
 export default defineComponent({
   name: 'App',
@@ -53,7 +53,7 @@ export default defineComponent({
 
     const route = useRoute();
 
-    const isAccount = computed(() => route.path.includes(PageRoutes.Account));
+    const isAccount = computed(() => route.path.includes(routerHelper.account().path()));
     const isLoading = computed(() => !!store.state.globalLoader);
     const isAuthorized = computed(() => !!store.userStore.state.user);
     const chatKey = computed(() => JSON.stringify(store.userStore.state.user));

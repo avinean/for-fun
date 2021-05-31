@@ -2,14 +2,15 @@ import userStore from '@/store/userStore';
 import {
   AuthRequest,
   AuthResponse,
+  Params,
   RegistrationRequest,
-  Routes,
+  routerHelper,
 } from '@doer/entities';
 import BaseService from './BaseService';
 
 export default class AuthService extends BaseService {
   signIn(params: AuthRequest): Promise<void> {
-    return this.publicPost<AuthResponse>(Routes.SignIn, { params })
+    return this.publicPost<AuthResponse>(routerHelper.signIn().path(), { params })
       .then(({ token }: AuthResponse) => {
         localStorage.sessionToken = token;
         localStorage.sessionDate = new Date().toISOString();
@@ -20,22 +21,22 @@ export default class AuthService extends BaseService {
   }
 
   signUp(params: Partial<RegistrationRequest>): Promise<void> {
-    return this.publicPost(Routes.SignUp, { params });
+    return this.publicPost(routerHelper.signUp().path(), { params });
   }
 
   confirmEmail(hash: string): Promise<void> {
-    return this.publicGet(`${'/confirm-email'}/${hash}`);
+    return this.publicGet(routerHelper.confirmEmail().dynamicPath(Params.Hash).path());
   }
 
   resendConfirmationLink(params: any) {
-    return this.publicPost('/resend-email-confirmation', { params });
+    return this.publicPost(routerHelper.resendEmailConfirmation().path(), { params });
   }
 
   restorePassword(params: any) {
-    return this.publicPost('/restore-password', { params });
+    return this.publicPost(routerHelper.restorePassword().path(), { params });
   }
 
   resetPassword(params: any) {
-    return this.publicPost('/reset-password', { params });
+    return this.publicPost(routerHelper.resetPassword().path(), { params });
   }
 }

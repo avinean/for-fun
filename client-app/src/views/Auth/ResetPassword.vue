@@ -44,7 +44,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { State, Store } from '@/models/Store/StoreInterface';
 import AuthService from '@/services/AuthService';
 import defaultStore from '@/store/store';
-import { PageRoutes } from '@doer/entities';
+import { routerHelper } from '@doer/entities';
 
 const authService = new AuthService();
 
@@ -88,7 +88,7 @@ export default defineComponent({
           waiting.value = true;
           authService.resetPassword({ ...form, ...route.params })
             .then(() => {
-              router.push(`${PageRoutes.Account}`);
+              router.push(routerHelper.account().path());
             })
             .catch((err) => {
               message.error({

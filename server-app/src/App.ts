@@ -2,7 +2,7 @@ import express from 'express';
 import http from 'http';
 import bodyParser from 'body-parser';
 import cors from 'cors';
-import { Routes } from '@doer/entities';
+import { routerHelper } from '@doer/entities';
 import PublicAPI from './API/PublicAPI';
 import UserAPI from './API/UserAPI';
 import secret from './Services/AuthService';
@@ -46,7 +46,7 @@ class App {
     });
     // authorize
     this.app.use(async (req, res, next) => {
-      if (req.path.includes(Routes.PublicApi)) {
+      if (req.path.includes(routerHelper.publicApi().path())) {
         next();
       } else {
         if (!req.headers.authorization) {
@@ -68,11 +68,11 @@ class App {
   }
 
   private initAPI(): void {
-    this.addController([ Routes.PublicApi ], new PublicAPI());
-    this.addController([ Routes.Api, Routes.User ], new UserAPI());
-    this.addController([ Routes.Api, Routes.Chat ], new ChatAPI());
-    this.addController([ Routes.Api, Routes.Message ], new MessageAPI());
-    this.addController([ Routes.Api, Routes.Game ], new GameAPI());
+    this.addController([ routerHelper.publicApi().path() ], new PublicAPI());
+    this.addController([ routerHelper.api().path(), routerHelper.user().path() ], new UserAPI());
+    this.addController([ routerHelper.api().path(), routerHelper.chat().path() ], new ChatAPI());
+    this.addController([ routerHelper.api().path(), routerHelper.message().path() ], new MessageAPI());
+    this.addController([ routerHelper.api().path(), routerHelper.game().path() ], new GameAPI());
 
     this.app.all('*', (req, res, next) => {
       res.send(404);
@@ -83,7 +83,7 @@ class App {
     new SocketsAPI(this.http);
   }
 
-  private addController(routes: Routes[], instance: BaseAPI): void {
+  private addController(routes: string[], instance: BaseAPI): void {
     const route = routes.join('');
     this.app.use(route, instance.router);
   }

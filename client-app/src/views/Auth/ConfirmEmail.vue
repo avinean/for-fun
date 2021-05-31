@@ -51,7 +51,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { State, Store } from '@/models/Store/StoreInterface';
 import AuthService from '@/services/AuthService';
 import defaultStore from '@/store/store';
-import { PageRoutes } from '@doer/entities';
+import { routerHelper } from '@doer/entities';
 
 const authService = new AuthService();
 
@@ -91,7 +91,7 @@ export default defineComponent({
     };
 
     const login = () => {
-      router.push(PageRoutes.Account);
+      router.push(routerHelper.account().path());
     };
 
     const submit = () => {

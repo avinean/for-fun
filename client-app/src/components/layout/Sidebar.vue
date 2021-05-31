@@ -1,10 +1,10 @@
 <template>
   <el-menu :collapse="isCollapse">
-    <el-menu-item>
+    <el-menu-item @click="goTo(routerHelper.account().path())">
       <i class="el-icon-setting"></i>
       <template #title>Settings</template>
     </el-menu-item>
-    <el-menu-item disabled>
+    <el-menu-item @click="goTo(routerHelper.account().statistics().path())">
       <i class="el-icon-s-data"></i>
       <template #title>Statistics</template>
     </el-menu-item>
@@ -25,14 +25,23 @@
 </template>
 
 <script lang="ts">
+import { routerHelper } from '@doer/entities';
 import { defineComponent, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default defineComponent({
   setup() {
     const isCollapse = ref<boolean>(true);
+    const router = useRouter();
+
+    const goTo = (route: string) => {
+      router.push(route);
+    };
 
     return {
       isCollapse,
+      routerHelper,
+      goTo,
     };
   },
 });

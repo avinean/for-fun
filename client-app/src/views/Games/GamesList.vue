@@ -19,7 +19,7 @@
 <script lang="ts">
 import { defineComponent, inject, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { Game, PageRoutes } from '@doer/entities';
+import { Game, routerHelper } from '@doer/entities';
 import defaultImage from '@/assets/puzzle.png';
 import { GameStoreInterface } from '@/models/Store/GameStoreInterface';
 
@@ -31,7 +31,7 @@ export default defineComponent({
     const openGame = (game: Game): void => {
       if (game.isUnderDevelopment) return;
       gameStore?.clearState();
-      router.push(`${PageRoutes.Games}/${game.strId}`);
+      router.push(routerHelper.games().dynamicPath(game.strId).path());
     };
 
     return {
