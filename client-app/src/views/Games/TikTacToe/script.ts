@@ -144,7 +144,7 @@ export default defineComponent({
 
       if (this.isGameFinished && this.acceptor && this.inviter) {
         console.log(this.winner?.id);
-        this.gameStore.setWinner<TikTacToeCell[][]>({
+        this.gameStore.setGameStatistics<TikTacToeCell[][]>({
           acceptor: this.acceptor?.id,
           invitor: this.inviter?.id,
           gameId: Number(this.game?.id),

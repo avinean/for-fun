@@ -15,6 +15,8 @@ import userStore from './userStore';
 
 socket.init();
 
+const gameService = new GameService();
+
 /**
  * Invitation logic
  *
@@ -80,7 +82,7 @@ const clearState = () => {
 const loadGames = () => {
   store.loading(true);
 
-  new GameService().getGames().then((games: Game[]) => {
+  gameService.getGames().then((games: Game[]) => {
     state.games = games;
   }).finally(() => {
     store.loading(false);
@@ -203,9 +205,9 @@ const setUsers = ({ inviter, acceptor, game }: GameRequest) => {
   });
 };
 
-const setWinner = <T>(history: GameHistory<T>) => {
-  new GameService().setGameStatistic<T>(history);
-};
+const setGameStatistics = <T>(history: GameHistory<T>) => gameService.setGameStatistic<T>(history);
+
+const getGameStatistics = () => gameService.getGameStatistic();
 
 export default {
   state: readonly(state),
@@ -217,8 +219,13 @@ export default {
   finishGame,
   startGame,
   clearState,
-  setWinner,
+  setGameStatistics,
+  getGameStatistics,
 } as GameStoreInterface;
+
+/**
+ * socket listeners
+*/
 
 socket.on('accept invitation to game', ({ inviter, acceptor, game }) => {
   if (!state.pendingUsers.length) return;

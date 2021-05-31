@@ -29,5 +29,6 @@ export interface GameStoreInterface {
   finishGame: () => void;
   startGame: () => void;
   clearState: () => void;
-  setWinner: <T>(history: GameHistory<T>) => void;
+  setGameStatistics: <T>(history: GameHistory<T>) => Promise<void>;
+  getGameStatistics: () => Promise<GameHistory<any>[]>;
 }

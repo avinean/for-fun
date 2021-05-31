@@ -7,6 +7,10 @@ export default class GameService extends BaseService {
   }
 
   setGameStatistic<T>(params: GameHistory<T>): Promise<void> {
-    return this.post<void>(routerHelper.game().history().path(), { params });
+    return this.post<void>(routerHelper.game().statistics().path(), { params });
+  }
+
+  getGameStatistic(): Promise<GameHistory<any>[]> {
+    return this.get<GameHistory<any>[]>(routerHelper.game().statistics().path());
   }
 }

@@ -11,6 +11,7 @@ import ChatAPI from './API/MessageAPI';
 import SocketsAPI from './SocketsAPI/SocketsAPI';
 import MessageAPI from './API/MessageAPI';
 import GameAPI from './API/GameAPI';
+import GameStatisticsAPI from './API/GameStatisticsAPI';
 
 interface Params {
   port: number;
@@ -68,11 +69,12 @@ class App {
   }
 
   private initAPI(): void {
-    this.addController([ routerHelper.publicApi().path() ], new PublicAPI());
-    this.addController([ routerHelper.api().path(), routerHelper.user().path() ], new UserAPI());
-    this.addController([ routerHelper.api().path(), routerHelper.chat().path() ], new ChatAPI());
-    this.addController([ routerHelper.api().path(), routerHelper.message().path() ], new MessageAPI());
-    this.addController([ routerHelper.api().path(), routerHelper.game().path() ], new GameAPI());
+    this.addController(routerHelper.publicApi().path(), new PublicAPI());
+    this.addController(routerHelper.api().user().path(), new UserAPI());
+    this.addController(routerHelper.api().chat().path(), new ChatAPI());
+    this.addController(routerHelper.api().message().path(), new MessageAPI());
+    this.addController(routerHelper.api().game().path(), new GameAPI());
+    this.addController(routerHelper.api().game().statistics().path(), new GameStatisticsAPI());
 
     this.app.all('*', (req, res, next) => {
       res.send(404);
@@ -83,8 +85,7 @@ class App {
     new SocketsAPI(this.http);
   }
 
-  private addController(routes: string[], instance: BaseAPI): void {
-    const route = routes.join('');
+  private addController(route: string, instance: BaseAPI): void {
     this.app.use(route, instance.router);
   }
   
