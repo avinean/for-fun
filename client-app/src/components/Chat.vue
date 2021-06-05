@@ -138,7 +138,7 @@ export default defineComponent({
     position: absolute;
     right: 0;
     bottom: 0;
-    z-index: 14;
+    z-index: 99999999999;
     width: 320px;
     max-width: 100vw;
     padding: 4px;

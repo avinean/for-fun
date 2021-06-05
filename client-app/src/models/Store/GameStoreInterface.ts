@@ -1,5 +1,12 @@
 import SocketService from '@/services/SocketService';
-import { Game, GameHistory, GameRequest, User } from '@doer/entities';
+import {
+  Game,
+  GameHistory,
+  GameRequest,
+  GameStatistics,
+  GameStatisticsParams,
+  User,
+} from '@doer/entities';
 import { ComputedRef } from 'vue';
 
 export interface GameStateInterface {
@@ -30,5 +37,5 @@ export interface GameStoreInterface {
   startGame: () => void;
   clearState: () => void;
   setGameStatistics: <T>(history: GameHistory<T>) => Promise<void>;
-  getGameStatistics: () => Promise<GameHistory<any>[]>;
+  getGameStatistics: (params: GameStatisticsParams) => Promise<GameStatistics[]>;
 }

@@ -177,8 +177,8 @@
         "affectsGlobalScope": false
       },
       "./src/game.ts": {
-        "version": "fa370f7cad65f03593ab3dc0f51358741afb168f041a914523f18431d6799edc",
-        "signature": "e871c22226513b2e575cf52b3314c25b430e874b3f7063e6ee403241183fc861",
+        "version": "a469e3030ccf2ec650a22a04ad53c492098782375e2bf0d0195bf7e085b22935",
+        "signature": "818cd4570b9b53819a6211a940e7786d7b824cd8a8f3b2a157be1be57b37e47b",
         "affectsGlobalScope": false
       },
       "./src/message.ts": {

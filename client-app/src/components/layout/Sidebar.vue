@@ -8,19 +8,19 @@
       <i class="el-icon-s-data"></i>
       <template #title>Statistics</template>
     </el-menu-item>
-    <el-menu-item disabled>
-      <i class="el-icon-user"></i>
-      <template #title>Players | Under development</template>
-    </el-menu-item>
+<!--    <el-menu-item disabled>-->
+<!--      <i class="el-icon-user"></i>-->
+<!--      <template #title>Players | Under development</template>-->
+<!--    </el-menu-item>-->
     <div class="spacer"></div>
-    <el-menu-item
-      @click="isCollapse = !isCollapse"
-    >
-      <i
-        :class="!isCollapse ? 'el-icon-d-arrow-left' : 'el-icon-d-arrow-right'"
-      ></i>
-      <template #title>Collapse</template>
-    </el-menu-item>
+<!--    <el-menu-item-->
+<!--      @click="isCollapse = !isCollapse"-->
+<!--    >-->
+<!--      <i-->
+<!--        :class="!isCollapse ? 'el-icon-d-arrow-left' : 'el-icon-d-arrow-right'"-->
+<!--      ></i>-->
+<!--      <template #title>Collapse</template>-->
+<!--    </el-menu-item>-->
   </el-menu>
 </template>
 
@@ -31,7 +31,7 @@ import { useRouter } from 'vue-router';
 
 export default defineComponent({
   setup() {
-    const isCollapse = ref<boolean>(true);
+    const isCollapse = ref<boolean>(false);
     const router = useRouter();
 
     const goTo = (route: string) => {

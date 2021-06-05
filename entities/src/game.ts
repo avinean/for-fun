@@ -29,3 +29,18 @@ export interface GameHistory<T> {
   createdAt?: string;
   state: T;
 }
+
+export interface GameStatistics {
+  invitor: User;
+  acceptor: User;
+  game: Game;
+  isWinner: boolean | null;
+  createdAt: string;
+}
+
+export interface GameStatisticsParams {
+  gameId: number;
+  invitorId: number;
+  acceptorId: number;
+  isWinner: boolean | null;
+}

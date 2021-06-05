@@ -3,7 +3,7 @@ import {
 } from 'vue';
 import { GameStateInterface, GameStoreInterface } from '@/models/Store/GameStoreInterface';
 import {
-  Game, GameRequest, User, routerHelper, GameHistory,
+  Game, GameRequest, User, routerHelper, GameHistory, GameStatisticsParams,
 } from '@doer/entities';
 import router from '@/router';
 import socket from '@/services/SocketService';
@@ -24,7 +24,7 @@ const gameService = new GameService();
  * inviter: sendInvitation
  * acceptor: listens to 'invite to game' and opens confirmation window
  *      acceptor: clicks 'cancel' -> confirmation window hides.
- *                @TODO send cancellation to inviter to stop pending
+ *                send cancellation to inviter to stop pending
  *      acceptor: clicks 'accept' -> onGameAcceptation runs and inviter
  *                notifies with 'accept invitation to game'
  * inviter: listens to 'accept invitation to game' and runs onGameAcceptation
@@ -207,7 +207,7 @@ const setUsers = ({ inviter, acceptor, game }: GameRequest) => {
 
 const setGameStatistics = <T>(history: GameHistory<T>) => gameService.setGameStatistic<T>(history);
 
-const getGameStatistics = () => gameService.getGameStatistic();
+const getGameStatistics = (params: GameStatisticsParams) => gameService.getGameStatistic(params);
 
 export default {
   state: readonly(state),

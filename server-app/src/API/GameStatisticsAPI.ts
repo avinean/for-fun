@@ -47,8 +47,8 @@ export default class GameStatisticsAPI extends BaseAPI {
       LEFT JOIN games as g ON g.id = gh.game_id
       LEFT JOIN users as i ON i.id = gh.invitor
       LEFT JOIN users as a ON a.id = gh.acceptor
-      WHERE invitor = $1 OR acceptor = $1`,
-      [ req.user.id ]
+      WHERE (invitor = $1 OR acceptor = $1) AND game_id = $2`,
+      [ req.user.id, req.query.gameId ]
     ).then((statistics) => {
       res.send(statistics);
     }).catch((e) => {

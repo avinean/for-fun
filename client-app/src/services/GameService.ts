@@ -1,4 +1,10 @@
-import { Game, GameHistory, routerHelper } from '@doer/entities';
+import {
+  Game,
+  GameHistory,
+  GameStatistics,
+  GameStatisticsParams,
+  routerHelper,
+} from '@doer/entities';
 import BaseService from '@/services/BaseService';
 
 export default class GameService extends BaseService {
@@ -10,7 +16,7 @@ export default class GameService extends BaseService {
     return this.post<void>(routerHelper.game().statistics().path(), { params });
   }
 
-  getGameStatistic(): Promise<GameHistory<any>[]> {
-    return this.get<GameHistory<any>[]>(routerHelper.game().statistics().path());
+  getGameStatistic(query: GameStatisticsParams): Promise<GameStatistics[]> {
+    return this.get<GameStatistics[]>(routerHelper.game().statistics().path(), { query });
   }
 }

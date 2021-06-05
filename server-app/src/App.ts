@@ -18,8 +18,10 @@ interface Params {
   host: string;
 }
 class App {
-  private app: express.Application;
-  private http: http.Server;
+  private readonly app: express.Application;
+
+  private readonly http: http.Server;
+
   private params: Params = {
     port: 5000,
     host: '127.0.0.1',
@@ -37,9 +39,9 @@ class App {
     this.app.use(bodyParser.json());
     this.app.use(cors());
     // test
-    // this.app.use((_, __, next) => {
-    //   setTimeout(next, 2000);
-    // });
+    this.app.use((_, __, next) => {
+      setTimeout(next, 2000);
+    });
     // logger
     this.app.use((req, res, next) => {
       console.log(`[${req.method}] ${req.originalUrl} ${new Date().toISOString()}`);
@@ -88,7 +90,7 @@ class App {
   private addController(route: string, instance: BaseAPI): void {
     this.app.use(route, instance.router);
   }
-  
+
   public run(): void {
     const { port, host } = this.params;
     this.http.listen(port, () => {

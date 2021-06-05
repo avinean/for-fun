@@ -6,7 +6,7 @@ import mailService from '../Services/MailService';
 import BaseAPI from './BaseAPI';
 
 export default class PublicAPI extends BaseAPI {
-  initRoutes() {    
+  initRoutes() {
     this.router.post(routerHelper.signIn().path(), async (req, res) => {
       secret.check(req.body)
       .then(token => {
@@ -20,7 +20,7 @@ export default class PublicAPI extends BaseAPI {
     this.router.post(routerHelper.signUp().path(), async (req, res) => {
       const hash = secret.hash(req.body);
       const { email, nickname } = req.body;
-      
+
       this.db.none(`
         INSERT INTO users
         (email, nickname, hash)
@@ -41,11 +41,11 @@ export default class PublicAPI extends BaseAPI {
     this.router.get(routerHelper.confirmEmail().dynamicPath(Params.Hash).path(), async (req, res) => {
 
       this.db.one(`
-        UPDATE users 
+        UPDATE users
         SET confirmed=true, confirmation_at=CURRENT_TIMESTAMP
         WHERE email=(
           SELECT email
-          FROM confirmation_email 
+          FROM confirmation_email
           WHERE
             EXTRACT(DAY FROM (CURRENT_TIMESTAMP - created_at)) < 1
             AND id=$1
@@ -100,7 +100,7 @@ export default class PublicAPI extends BaseAPI {
           });
         }
       } catch {}
-      
+
       mailService.sendEmailConfirmation(email)
         .then(() => {
           res.sendStatus(200);
@@ -140,7 +140,7 @@ export default class PublicAPI extends BaseAPI {
           });
         }
       } catch {}
-      
+
       mailService.sendPasswordRestoring(email)
         .then(() => {
           res.sendStatus(200);
