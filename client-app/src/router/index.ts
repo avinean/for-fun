@@ -19,7 +19,7 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "signup" */ '../views/Auth/SignUp.vue'),
   },
   {
-    ...routerHelper.auth().registration().param(Params.Hash).get(),
+    ...routerHelper.auth().confirmEmail().param(Params.Hash).get(),
     component: () => import(/* webpackChunkName: "confirm-email" */ '../views/Auth/ConfirmEmail.vue'),
   },
   {

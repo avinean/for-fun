@@ -25,10 +25,10 @@ class MailService {
         subject: 'Please confirm your email',
         html: `<div>
           <h1>You've just registered on <a href="https://doer.com">doer.com</a>. Please follow the link to </h1>
-          <a href="${process.env.BASE_URL}${routerHelper.auth().restorePassword().dynamicPath(id).path()}" target="_blank">confirm your email</a>
+          <a href="${process.env.BASE_URL}${routerHelper.auth().confirmEmail().dynamicPath(id).path()}" target="_blank">confirm your email</a>
         </div>`,
       };
-      
+
       transporter.sendMail(mailOptions);
     });
   }
@@ -49,7 +49,7 @@ class MailService {
           <a href="${process.env.BASE_URL}${routerHelper.auth().resetPassword().dynamicPath(id).path()}" target="_blank">set new password</a>
         </div>`,
       };
-      
+
       transporter.sendMail(mailOptions);
     });
   }

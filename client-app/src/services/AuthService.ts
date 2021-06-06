@@ -25,7 +25,7 @@ export default class AuthService extends BaseService {
   }
 
   confirmEmail(hash: string): Promise<void> {
-    return this.publicGet(routerHelper.confirmEmail().dynamicPath(Params.Hash).path());
+    return this.publicGet(routerHelper.confirmEmail().dynamicPath(hash).path());
   }
 
   resendConfirmationLink(params: any) {

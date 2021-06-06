@@ -38,8 +38,8 @@ export default class PublicAPI extends BaseAPI {
         });
     });
 
-    this.router.get(routerHelper.confirmEmail().dynamicPath(Params.Hash).path(), async (req, res) => {
-
+    this.router.get(routerHelper.confirmEmail().param(Params.Hash).path(), async (req, res) => {
+      console.log(req.params.hash);
       this.db.one(`
         UPDATE users
         SET confirmed=true, confirmation_at=CURRENT_TIMESTAMP
