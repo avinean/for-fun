@@ -4,15 +4,15 @@
       <router-link :to="routerHelper.home().path()">
         <img :src="logo" class="header__logo" alt="Doer Logo">
       </router-link>
-      <router-link :to="routerHelper.home().path()" class="header__link">
-        Home
-      </router-link>
-      <router-link :to="routerHelper.games().path()" class="header__link">
-        Games
-      </router-link>
-      <router-link :to="routerHelper.about().path()" class="header__link">
-        About us
-      </router-link>
+<!--      <router-link :to="routerHelper.home().path()" class="header__link">-->
+<!--        Home-->
+<!--      </router-link>-->
+<!--      <router-link :to="routerHelper.games().path()" class="header__link">-->
+<!--        Games-->
+<!--      </router-link>-->
+<!--      <router-link :to="routerHelper.about().path()" class="header__link">-->
+<!--        About us-->
+<!--      </router-link>-->
       <div class="spacer"></div>
       <template v-if="state.user">
         <el-button

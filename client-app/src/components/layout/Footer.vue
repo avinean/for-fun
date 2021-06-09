@@ -14,17 +14,17 @@
         </template>
       </div>
     </div>
-    <div class="footer__navigation">
-      <router-link :to="routerHelper.home().path()" class="footer__link">
-        Home
-      </router-link>
-      <router-link :to="routerHelper.about().path()" class="footer__link">
-        About us
-      </router-link>
-      <router-link :to="routerHelper.account().path()" class="footer__link">
-        Account
-      </router-link>
-    </div>
+<!--    <div class="footer__navigation">-->
+<!--      <router-link :to="routerHelper.home().path()" class="footer__link">-->
+<!--        Home-->
+<!--      </router-link>-->
+<!--      <router-link :to="routerHelper.about().path()" class="footer__link">-->
+<!--        About us-->
+<!--      </router-link>-->
+<!--      <router-link :to="routerHelper.account().path()" class="footer__link">-->
+<!--        Account-->
+<!--      </router-link>-->
+<!--    </div>-->
   </footer>
 </template>
 

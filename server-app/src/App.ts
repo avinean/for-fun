@@ -75,7 +75,7 @@ class App {
     this.addController(routerHelper.api().user().path(), new UserAPI());
     this.addController(routerHelper.api().chat().path(), new ChatAPI());
     this.addController(routerHelper.api().message().path(), new MessageAPI());
-    this.addController(routerHelper.api().game().path(), new GameAPI());
+    this.addController(routerHelper.publicApi().game().path(), new GameAPI());
     this.addController(routerHelper.api().game().statistics().path(), new GameStatisticsAPI());
 
     this.app.all('*', (req, res, next) => {

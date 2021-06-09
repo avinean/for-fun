@@ -90,7 +90,7 @@ export default defineComponent({
   setup() {
     const gameStore = inject<GameStoreInterface>('gameStore');
     const userStore = inject<UserStoreInterface>('userStore');
-    const isCollapsed = ref<boolean>(false);
+    const isCollapsed = ref<boolean>(true);
     const games = computed(() => gameStore?.state.games || []);
     const pendingUsers = computed(() => gameStore?.state.pendingUsers || []);
     const isGameRunning = computed(() => gameStore?.state.isGameRunning);
