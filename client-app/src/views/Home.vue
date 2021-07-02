@@ -48,7 +48,7 @@ export default defineComponent({
 
 <style lang="scss">
 
-$size: 400px;
+$size: 300px;
 
 .home  {
   position: relative;
@@ -83,10 +83,11 @@ $size: 400px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  backface-visibility: hidden;
   background-color: #fff;
-  border: 1px solid #fff;
   transform-style: preserve-3d;
+  background-size: contain;
+  border: 1px solid #cecece;
+  border-radius: 25px;
 }
 
 .game__label {

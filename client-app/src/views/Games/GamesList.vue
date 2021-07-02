@@ -1,12 +1,16 @@
 <template>
   <el-row :gutter="20" style="width: 100%">
-    <el-col :span="8" v-for="game in gameStore.state.games" :key="game.name">
+    <el-col :span="6" v-for="game in gameStore.state.games" :key="game.name">
       <el-card
         class="card"
         :class="{'card--development': game.isUnderDevelopment}"
         @click="openGame(game)"
       >
-        <img :src="game.image || defaultImage" class="card__image">
+        <img
+          :src="game.image || defaultImage"
+          :alt="game.name"
+          class="card__image"
+        >
         <div class="card__content">
           <span>{{ game.name }}</span>
           <el-button type="text" class="button">Play</el-button>

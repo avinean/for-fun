@@ -1,5 +1,8 @@
 <template>
-    <div class="chatbox">
+    <div
+      class="chatbox"
+      :class="{'chatbox--collapsed': isCollapsed}"
+    >
       <div class="chatbox__header">
         <span>Chat</span>
         <div class="spacer" />
@@ -7,7 +10,6 @@
       </div>
       <div
         class="chatbox__body"
-        :class="{'chatbox__body--collapsed': isCollapsed}"
       >
         <div
           ref="messagesWrap"
@@ -150,6 +152,12 @@ export default defineComponent({
     color: #303133;
     transition: .3s;
 
+    &--collapsed {
+      & .chatbox__body {
+        max-height: 0px;
+      }
+    }
+
     &__ {
       &header {
         display: flex;
@@ -165,10 +173,6 @@ export default defineComponent({
         height: 420px;
         max-height: 420px;
         transition: all ease .2s;
-
-        &--collapsed {
-          max-height: 0px;
-        }
       }
 
       &msgs {

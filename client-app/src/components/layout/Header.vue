@@ -1,18 +1,23 @@
 <template>
   <div class="header__wrap">
     <header class="header">
-      <router-link :to="routerHelper.home().path()">
-        <img :src="logo" class="header__logo" alt="Doer Logo">
-      </router-link>
-<!--      <router-link :to="routerHelper.home().path()" class="header__link">-->
-<!--        Home-->
-<!--      </router-link>-->
-<!--      <router-link :to="routerHelper.games().path()" class="header__link">-->
-<!--        Games-->
-<!--      </router-link>-->
-<!--      <router-link :to="routerHelper.about().path()" class="header__link">-->
-<!--        About us-->
-<!--      </router-link>-->
+      <div class="header__nav">
+        <router-link :to="routerHelper.home().path()" class="header__link">
+          <div class="header__link-inner">
+            <img :src="logo" class="header__logo" alt="Doer Logo">
+            DOER
+          </div>
+        </router-link>
+        <!--      <router-link :to="routerHelper.home().path()" class="header__link">-->
+        <!--        Home-->
+        <!--      </router-link>-->
+        <!--      <router-link :to="routerHelper.games().path()" class="header__link">-->
+        <!--        Games-->
+        <!--      </router-link>-->
+        <!--      <router-link :to="routerHelper.about().path()" class="header__link">-->
+        <!--        About us-->
+        <!--      </router-link>-->
+      </div>
       <div class="spacer"></div>
       <template v-if="state.user">
         <el-button
@@ -98,10 +103,15 @@ export default defineComponent({
       padding: 15px 25px;
       color: #606266;
       text-decoration: none;
+
+      &-inner {
+        display: flex;
+        align-items: center;
+      }
     }
-    &link:hover, &link.router-link-active {
-      background: rgba(200, 200, 200, .5);
-    }
+    //&link:hover, &link.router-link-active {
+    //  background: rgba(200, 200, 200, .5);
+    //}
   }
 }
 </style>

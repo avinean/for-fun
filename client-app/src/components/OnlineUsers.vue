@@ -2,16 +2,14 @@
     <div
       v-if="!isGameRunning"
       class="online-users"
+      :class="{'online-users--collapsed': isCollapsed}"
     >
       <div class="online-users__header">
         <span>Currently online</span>
         <div class="spacer" />
         <i class="el-icon-minus" @click="isCollapsed = !isCollapsed"></i>
       </div>
-      <div
-        class="online-users__body"
-        :class="{'online-users__body--collapsed': isCollapsed}"
-      >
+      <div class="online-users__body">
         <div
           class="online-users__users"
         >
@@ -125,7 +123,6 @@ export default defineComponent({
     position: absolute;
     right: 320px;
     bottom: 0;
-    z-index: 99999999999;
     width: 320px;
     max-width: 100vw;
     padding: 4px;
@@ -136,6 +133,12 @@ export default defineComponent({
     overflow: hidden;
     color: #303133;
     transition: .3s;
+
+    &--collapsed {
+      & .online-users__body {
+        max-height: 0px;
+      }
+    }
 
     &__ {
       &header {
@@ -152,10 +155,6 @@ export default defineComponent({
         height: 420px;
         max-height: 420px;
         transition: all ease .2s;
-
-        &--collapsed {
-          max-height: 0px;
-        }
       }
 
       &users {
